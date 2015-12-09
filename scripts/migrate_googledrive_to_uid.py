@@ -1,0 +1,22 @@
+import logging
+from website.app import init_app
+from website.files.models.googledrive import GoogleDriveFile 
+from scripts import utils as scripts_utils
+from framework.transactions.context import TokuTransaction
+
+
+logger = logging.getLogger(__name__)
+
+
+def main():
+    with TokuTransaction():
+        for file in GoogleDriveFile.find():
+            new_path = '/' + file.path.split('/')[1]
+            logger.info(u'{} -> {}'.format(file.path, new_path))
+            file.path = new_path
+
+
+if __name__ == '__main__':
+    scripts_utils.add_file_logger(logger, __file__)
+    init_app(set_backends=True, routes=False)
+    main()
