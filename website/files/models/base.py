@@ -7,6 +7,7 @@ import pymongo
 import datetime
 import requests
 import functools
+from pprint import pprint
 
 from modularodm import fields, Q
 from modularodm.exceptions import NoResultsFound
@@ -536,6 +537,13 @@ class File(FileNode):
         :param dict data: Metadata recieved from waterbutler
         :returns: FileVersion
         """
+        pprint("####UPDATE_FILE###")
+
+        pprint("***DATA")
+        pprint(data)
+        pprint("***REVISION")
+        pprint(revision)
+
         self.name = data['name']
         self.materialized_path = data['materialized']
 
@@ -548,6 +556,9 @@ class File(FileNode):
             ignoretz=True,
             default=datetime.datetime.utcnow()  # Just incase nothing can be parsed
         )
+
+        pprint("**modified_after_modified")
+        pprint(data["modified"])
 
         # if revision is none then version is the latest version
         # Dont save the latest information
@@ -703,6 +714,9 @@ class FileVersion(StoredObject):
         return self.location_hash == other.location_hash
 
     def update_metadata(self, metadata, save=True):
+        pprint("=====UPDATE_METADATA=====")
+        pprint("**metadata")
+        pprint(metadata)
         self.metadata.update(metadata)
         # metadata has no defined structure so only attempt to set attributes
         # If its are not in this callback it'll be in the next
@@ -712,6 +726,10 @@ class FileVersion(StoredObject):
             # TODO handle the timezone here the user that updates the file may see an
             # Incorrect version
             self.date_modified = parse_date(self.metadata['modified'], ignoretz=True)
+
+        pprint("**modified")
+        pprint(self.date_modified)
+        pprint("-----UPDATE_METADATA-----")
 
         if save:
             self.save()

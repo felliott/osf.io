@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import httplib
 import logging
+from pprint import pprint
 
 from modularodm import Q
 from modularodm.storage.base import KeyExistsException
@@ -166,6 +167,13 @@ def osfstorage_create_child(file_node, payload, node_addon, **kwargs):
     if not is_folder:
         try:
             if file_node.checkout is None or file_node.checkout._id == user._id:
+
+                pprint("@@@@@CREATE_CHILD@@@@@")
+                pprint("***settings")
+                pprint(payload['settings'])
+                pprint("***metadata")
+                pprint(payload['metadata'])
+                pprint("@@@@@?CREATE_CHILD@@@@")
                 version = file_node.create_version(
                     user,
                     dict(payload['settings'], **dict(
