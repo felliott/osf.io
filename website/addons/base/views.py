@@ -2,6 +2,7 @@ import os
 import uuid
 import httplib
 import datetime
+from pprint import pprint
 
 import jwe
 import jwt
@@ -155,6 +156,7 @@ def make_auth(user):
 
 @collect_auth
 def get_auth(auth, **kwargs):
+    pprint("::::::GET_AUTH::::::")
     cas_resp = None
     if not auth.user:
         # Central Authentication Server OAuth Bearer Token
@@ -171,6 +173,7 @@ def get_auth(auth, **kwargs):
             if cas_resp.authenticated:
                 auth.user = User.load(cas_resp.user)
 
+    pprint("***TRUMPIT")
     try:
         data = jwt.decode(
             jwe.decrypt(request.args.get('payload', '').encode('utf-8'), WATERBUTLER_JWE_KEY),
@@ -184,6 +187,7 @@ def get_auth(auth, **kwargs):
     if not auth.user:
         auth.user = User.from_cookie(data.get('cookie', ''))
 
+    pprint("***gronch")
     try:
         action = data['action']
         node_id = data['nid']
@@ -195,18 +199,26 @@ def get_auth(auth, **kwargs):
     if not node:
         raise HTTPError(httplib.NOT_FOUND)
 
+    pprint("***access")
     check_access(node, auth, action, cas_resp)
 
     provider_settings = node.get_addon(provider_name)
     if not provider_settings:
         raise HTTPError(httplib.BAD_REQUEST)
 
+    pprint("****provider_settins")
+    pprint(provider_settings)
     try:
         credentials = provider_settings.serialize_waterbutler_credentials()
+        pprint("\\\credit")
+        pprint(credentials)
         waterbutler_settings = provider_settings.serialize_waterbutler_settings()
     except exceptions.AddonError:
         log_exception()
         raise HTTPError(httplib.BAD_REQUEST)
+
+    pprint("***CREDS:")
+    pprint(credentials)
 
     return {'payload': jwe.encrypt(jwt.encode({
         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=settings.WATERBUTLER_JWT_EXPIRATION),

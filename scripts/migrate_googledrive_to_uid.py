@@ -51,3 +51,5 @@ if __name__ == '__main__':
     scripts_utils.add_file_logger(logger, __file__)
     init_app(set_backends=True, routes=False)
     main()
+
+        return {'authorization': 'Bearer {}'.format(self.token)}
