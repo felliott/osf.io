@@ -8,7 +8,6 @@ from framework.transactions.context import TokuTransaction
 from modularodm.query.querydialect import DefaultQueryDialect as Q
 from itertools import groupby
 import re
-from pprint import pprint
 import requests
 
 logger = logging.getLogger(__name__)
@@ -42,10 +41,6 @@ def _build_query(folder_id):
 
 
 def _response_to_metadata(response, parent):
-    pprint("###_repsonse_to_metadata")
-    pprint("***parent:")
-    pprint(parent)
-
     is_folder = response.get('mimeType') == FOLDER_MIME_TYPE
     name = response['title']
 
@@ -78,9 +73,6 @@ def update_node(current_node, gdrive_filenodes):
     if current_node is None:
         return
 
-    pprint("######UPDATE_NODE#######")
-    pprint(gdrive_filenodes)
-
     node_settings = GoogleDriveNodeSettings.find_one(Q('owner', 'eq', current_node))
     access_token = node_settings.fetch_access_token()
     headers = {'authorization': 'Bearer {}'.format(access_token)}
@@ -95,39 +87,23 @@ def update_node(current_node, gdrive_filenodes):
         logger.info(u'  --Root: {}'.format(filenode_root))
 
         payload = {'alt': 'json', 'q':_build_query(parent_folders[filenode_root])}
-        pprint("***payload:")
-        pprint(payload)
         resp = requests.get(base_url, params=payload, headers=headers)
-        pprint("***resp:")
-        pprint(resp)
         items = resp.json()['items']
-        # pprint("***ITEMS:")
-        # pprint(items)
 
         metadata = map(lambda x: _response_to_metadata(x, filenode_root), items)
-        # pprint("***metadata:")
-        # pprint(metadata)
 
         lunch = sorted(list(filenodes), key=lambda x: x[1].path)
-        # pprint("***LUNCH:")
-        # pprint(lunch)
 
         for pair in lunch:
             storedfilenode = pair[1]
             filenode = GoogleDriveFileNode(storedfilenode)
 
-            # pprint("***old_fn:")
-            # pprint(filenode.serialize())
-
-            # logger.info(u'    --File: {}'.format(filenode.path))
+            logger.info(u'    --File: {}'.format(filenode.path))
             found = None
             for metadatum in metadata:
                 if metadatum['name'] == filenode.name and (metadatum['kind'] == 'file') == filenode.is_file:
                     found = metadatum
                     break
-
-            # pprint("***found:")
-            # pprint(found)
 
             if found is None:
                 filenode.delete()
@@ -137,8 +113,6 @@ def update_node(current_node, gdrive_filenodes):
                 parent_folders[filenode.path] = found['path'].strip('/')
 
             filenode.path = found['path']
-            # pprint("***new_fn:")
-            # pprint(filenode.serialize())
             filenode.update(found['extra']['revisionId'], found)
 
 
