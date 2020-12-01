@@ -38,9 +38,8 @@ from osf.utils.requests import check_select_for_update
 from osf import features
 from website.util.metrics import CampaignClaimedTags, CampaignSourceTags
 
-@block_bing_preview
-@collect_auth
-def reset_password_get(auth, uid=None, token=None):
+
+def _reset_password_get(auth, uid=None, token=None):
     """
     View for user to land on the reset password page.
     HTTp Method: GET
@@ -77,6 +76,18 @@ def reset_password_get(auth, uid=None, token=None):
         'token': user_obj.verification_key_v2['token'],
         'login_url': service_url,
     }
+
+
+@block_bing_preview
+@collect_auth
+def reset_password_get(auth, uid=None, token=None):
+    return _reset_password_get(auth, uid=uid, token=token)
+
+
+@block_bing_preview
+@collect_auth
+def reset_password_institution_get(auth, uid=None, token=None):
+    return _reset_password_get(auth, uid=uid, token=token)
 
 
 def reset_password_post(uid=None, token=None):
@@ -134,8 +145,20 @@ def reset_password_post(uid=None, token=None):
     }
 
 
+def reset_password_institution_post(uid=None, token=None):
+    return reset_password_post(uid=uid, token=token)
+
+
+def forgot_password_get():
+    return _forgot_password_get()
+
+
+def forgot_password_institution_get():
+    return _forgot_password_get()
+
+
 @collect_auth
-def forgot_password_get(auth):
+def _forgot_password_get(auth):
     """
     View for user to land on the forgot password page.
     HTTP Method: GET
@@ -155,7 +178,7 @@ def forgot_password_get(auth):
     return context
 
 
-def forgot_password_post():
+def forgot_password_post(mail_template=mails.FORGOT_PASSWORD, reset_route='reset_password_get'):
     """
     View for user to submit forgot password form.
     HTTP Method: POST
@@ -190,19 +213,78 @@ def forgot_password_post():
                 reset_link = furl.urljoin(
                     settings.DOMAIN,
                     web_url_for(
-                        'reset_password_get',
+                        reset_route,
                         uid=user_obj._id,
                         token=user_obj.verification_key_v2['token']
                     )
                 )
                 mails.send_mail(
                     to_addr=email,
-                    mail=mails.FORGOT_PASSWORD,
+                    mail=mail_template,
                     reset_link=reset_link,
                     can_change_preferences=False,
                 )
 
         status.push_status_message(status_message, kind=kind, trust=False)
+
+    return {}
+
+
+def forgot_password_institution_post(mail_template=mails.FORGOT_PASSWORD_INSTITUTION,
+                                     reset_route='reset_password_institution_get'):
+    """
+    Response view after user POSTs to institutional forgot password page.
+
+    When an institution is deactivated, the user should be given the opportunity to reclaim their
+    account. CAS co-ops the forgot-password functionality to send a "set a new password" email link
+    to the institutional user.  This is a copy of ``forgot_password_get`` with a slightly different
+    mako template.  The status message from the reset action is displayed as regular text and the
+    password form is not shown.
+
+    HTTP Method: POST
+    :return {}
+    """
+
+    form = ForgotPasswordForm(request.form, prefix='forgot_password')
+
+    if not form.validate():
+        # Don't go anywhere
+        forms.push_errors_to_status(form.errors)
+    else:
+        email = form.email.data
+        status_message = ('If there is an OSF account associated with {0}, an email with instructions on how to '
+                          'reset the OSF password has been sent to {0}. If you do not receive an email and believe '
+                          'you should have, please contact OSF Support. ').format(email)
+        kind = 'success'
+        # check if the user exists
+        user_obj = get_user(email=email)
+        if user_obj:
+            # rate limit forgot_password_post
+            if not throttle_period_expired(user_obj.email_last_sent, settings.SEND_EMAIL_THROTTLE):
+                status_message = 'You have recently requested to change your password. Please wait a few minutes ' \
+                                 'before trying again.'
+                kind = 'error'
+            # TODO [OSF-6673]: Use the feature in [OSF-6998] for user to resend claim email.
+            elif user_obj.is_active:
+                # new random verification key (v2)
+                user_obj.verification_key_v2 = generate_verification_key(verification_type='password')
+                user_obj.email_last_sent = timezone.now()
+                user_obj.save()
+                reset_link = furl.urljoin(
+                    settings.DOMAIN,
+                    web_url_for(
+                        reset_route,
+                        uid=user_obj._id,
+                        token=user_obj.verification_key_v2['token']
+                    )
+                )
+                mails.send_mail(
+                    to_addr=email,
+                    mail=mail_template,
+                    reset_link=reset_link,
+                    can_change_preferences=False,
+                )
+        return {'message': status_message}
 
     return {}
 
