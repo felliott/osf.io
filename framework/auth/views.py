@@ -284,7 +284,11 @@ def forgot_password_institution_post(mail_template=mails.FORGOT_PASSWORD_INSTITU
                     reset_link=reset_link,
                     can_change_preferences=False,
                 )
-        return {'message': status_message}
+
+        if kind == 'success':
+            return {'message': status_message}
+        else:
+            status.push_status_message(status_message, kind=kind, trust=False)
 
     return {}
 
