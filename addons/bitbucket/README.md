@@ -4,7 +4,7 @@
 
 
 ### Setup Bitbucket
-1. On your Bitbucket user settings, go to "Access Management" -> "OAuth" -> "Add consumer"
+1. On your Bitbucket workspace settings, go to "Apps and Features" -> "OAuth consumers" -> "Add consumer"
 2. Enter any name for the application name, e.g. "OSF Bitbucket Addon (local)"
 3. In the Callback URL field, enter `http://localhost:5000/oauth/callback/bitbucket`
 4. In the URL field, enter `http://localhost:5000/`
