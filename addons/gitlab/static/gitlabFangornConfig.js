@@ -22,7 +22,7 @@ function _getCurrentBranch(item) {
     if (item.data.branch === undefined) {
         if (item.data.isAddonRoot) {
             branch = item.data.default_branch;
-        } else {
+        } else if (item.data.extra !== undefined) {
             branch = item.data.extra.branch;
         }
     } else {
@@ -169,8 +169,11 @@ function _fangornGitLabTitle(item, col)  {
     if (item.data.addonFullname) {
         var urlParams = $osf.urlParams();
 
-        if (!item.data.branch && urlParams.branch) {
-            item.data.branch = urlParams.branch;
+        if (!(item.data.extra && item.data.extra.branch) && urlParams.branch) {
+            if (!item.data.extra) {
+                item.data.extra = {};
+            }
+            item.data.extra.branch = urlParams.branch;
         }
         var branch = _getCurrentBranch(item);
 

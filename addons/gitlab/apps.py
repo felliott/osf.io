@@ -3,7 +3,7 @@ import os
 
 from addons.base.apps import BaseAddonAppConfig
 from addons.gitlab.api import GitLabClient, ref_to_params
-from addons.gitlab.exceptions import NotFoundError, GitLabError
+from addons.gitlab.exceptions import NotFoundError, GitLabError, AuthError
 from addons.gitlab.utils import get_refs, check_permissions
 from website.util import rubeus
 
@@ -26,15 +26,21 @@ def gitlab_hgrid_data(node_settings, auth, **kwargs):
     if node.is_public or node.is_contributor_or_group_member(auth.user):
         try:
             repo = connection.repo(node_settings.repo_id)
-        except NotFoundError:
-            logger.error('Could not access GitLab repo')
+        except (NotFoundError, AuthError) as exc:
+            logger.error('Could not access GitLab repo: {}'.format(exc))
             return None
+        except Exception as exc:
+            logger.error('GitLab error: type:({}) repr:({})'.format(type(exc), exc))
+            raise exc
 
     try:
-        branch, sha, branches = get_refs(node_settings, branch=kwargs.get('branch'), sha=kwargs.get('sha'), connection=connection)
+        branch, sha, branches = get_refs(node_settings, branch=kwargs.get('branch'),
+                                         sha=kwargs.get('sha'), connection=connection)
     except (NotFoundError, GitLabError):
         logger.error('GitLab repo not found')
         return
+    except Exception as exc:
+        logger.error('GitLab error: type:({}) repr:({})'.format(type(exc), exc))
 
     if branch is not None:
         ref = ref_to_params(branch, sha)
