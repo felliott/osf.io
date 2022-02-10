@@ -6,6 +6,7 @@ var md5 = require('js-md5');
 var Raven = require('raven-js');
 var Cookie = require('js-cookie');
 var lodashGet = require('lodash.get');
+var lodash = require('lodash');
 var keenTracking = require('keen-tracking');
 
 var KeenTracker = (function() {
@@ -99,6 +100,20 @@ var KeenTracker = (function() {
     }  // end _defaultKeenPayload
 
     function _trackCustomEvent(client, collection, eventData) {
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/analytics/log_pageview/',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                collection: collection,
+                eventData: lodash.defaults(eventData, _defaultKeenPayload()),
+            }),
+        }).done(function(response) {
+            console.debug('eventSINGULAR: success, events were sent!', response);
+        }).fail(function(error) {
+            console.debug('eventSINGULAR: error, plump fluff!', error);
+        });
+
         if (client === null) {
             return;
         }
@@ -117,6 +132,19 @@ var KeenTracker = (function() {
     }
 
     function _trackCustomEvents(client, events) {
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/analytics/log_pageview/',
+            contentType: 'application/json',
+            data: JSON.stringify({            
+                events: lodash.defaults(events, _defaultKeenPayload())
+            }),
+        }).done(function(response) {
+            console.debug('eventsPLURAL: success, events were sent!', response);
+        }).fail(function(error) {
+            console.debug('eventsPLURAL: error, plump fluff!', error);
+        });
+
         if (client === null) {
             return;
         }

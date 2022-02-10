@@ -111,6 +111,7 @@ class NodeSummary(SummaryAnalytics):
             )
         )
 
+        logger.info(totals)
         return [totals]
 
 

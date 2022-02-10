@@ -54,6 +54,7 @@ from website.profile.utils import get_profile_image_url
 from website.profile import views as profile_views
 from website.project import views as project_views
 from addons.base import views as addon_views
+from website.analytics2 import views as analytics_views
 from website.discovery import views as discovery_views
 from website.conferences import views as conference_views
 from website.preprints import views as preprint_views
@@ -1420,6 +1421,15 @@ def make_url_map(app):
             addon_views.addon_view_or_download_file_legacy,
             json_renderer
         ),
+
+        # analytics (pageview logging)
+        Rule(
+            ['/api/v1/analytics/log_pageview/'],
+            'post',
+            analytics_views.log_pageview,
+            json_renderer,
+        ),
+
         Rule(
             [
                 '/quickfiles/<fid>/'
