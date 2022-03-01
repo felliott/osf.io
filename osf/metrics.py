@@ -528,3 +528,9 @@ class RegistriesModerationMetrics(MetricMixin, metrics.Metric):
                 }
             }
         }).execute().aggregations['providers'].to_dict()
+
+
+# class PageVisit(metrics.Metric):
+#     referer_domain = metrics.Keyword()
+#     hour_of_day = metrics.Integer()
+#     path_n_title = metrics.Keyword()

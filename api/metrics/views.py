@@ -18,6 +18,8 @@ from elasticsearch_dsl.connections import get_connection
 
 from osf.features import ENABLE_RAW_METRICS
 
+from .mourningwail import get_node_analytics, MwTimespan
+
 
 class PreprintMetricMixin(JSONAPIBaseView):
     permission_classes = (
@@ -172,7 +174,7 @@ class RawMetricsView(GenericAPIView):
     required_read_scopes = [CoreScopes.METRICS_BASIC]
     required_write_scopes = [CoreScopes.METRICS_RESTRICTED]
 
-    view_category = 'raw-metrics'
+    view_category = 'metrics'
     view_name = 'raw-metrics-view'
 
     serializer_class = RawMetricsSerializer
@@ -213,8 +215,22 @@ class RegistriesModerationMetricsView(GenericAPIView):
     required_read_scopes = [CoreScopes.METRICS_BASIC]
     required_write_scopes = [CoreScopes.METRICS_RESTRICTED]
 
-    view_category = 'raw-metrics'
-    view_name = 'raw-metrics-view'
+    view_category = 'metrics'
+    view_name = 'registries-moderation-metrics'
 
     def get(self, request, *args, **kwargs):
         return JsonResponse(RegistriesModerationMetrics.get_registries_info())
+
+
+class NodeAnalytics(GenericAPIView):
+    permission_classes = (
+        # TODO ...is this just open to the wild public?
+    )
+
+    view_category = 'metrics'
+    view_name = 'node-analytics'
+
+    def get(self, request, node_guid, timespan):
+        return JsonResponse(
+            get_node_analytics(node_guid, MwTimespan(timespan))
+        )
