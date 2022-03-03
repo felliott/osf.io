@@ -1,6 +1,6 @@
 import json
 
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.exceptions import ValidationError
 from rest_framework import permissions as drf_permissions
 from rest_framework.generics import GenericAPIView
@@ -18,7 +18,7 @@ from elasticsearch_dsl.connections import get_connection
 
 from osf.features import ENABLE_RAW_METRICS
 
-from .mourningwail import get_node_analytics, MwTimespan
+from .mourningwail import get_node_analytics, record_page_visit
 
 
 class PreprintMetricMixin(JSONAPIBaseView):
@@ -232,5 +232,20 @@ class NodeAnalytics(GenericAPIView):
 
     def get(self, request, node_guid, timespan):
         return JsonResponse(
-            get_node_analytics(node_guid, MwTimespan(timespan))
+            get_node_analytics(node_guid, timespan)
         )
+
+
+class PageVisit(GenericAPIView):
+    view_category = 'metrics'
+    view_name = 'page-visit'
+
+    def get(self, request, node_guid):
+        qparams = request.GET
+        record_page_visit(
+            node_guid=node_guid,
+            page_path=qparams.get('page_path'),
+            page_title=qparams.get('page_title'),
+            referer_domain=qparams.get('referer_domain'),
+        )
+        return HttpResponse(status=201)

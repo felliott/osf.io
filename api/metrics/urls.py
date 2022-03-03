@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^preprints/downloads/$', views.PreprintDownloadMetrics.as_view(), name=views.PreprintDownloadMetrics.view_name),
     url(r'^registries_moderation/transitions/$', views.RegistriesModerationMetricsView.as_view(), name=views.RegistriesModerationMetricsView.view_name),
     url(r'^node_analytics/(?P<node_guid>[a-z0-9]+)/(?P<timespan>week|fortnight|month)/$', views.NodeAnalytics.as_view(), name=views.NodeAnalytics.view_name),
+    url(r'^page_visit/(?P<node_guid>[a-z0-9]+)/$', views.PageVisit.as_view(), name=views.PageVisit.view_name),
 ]
