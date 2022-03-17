@@ -238,14 +238,31 @@ class NodeAnalytics(GenericAPIView):
 
 class PageVisit(GenericAPIView):
     view_category = 'metrics'
-    view_name = 'page-visit'
+    view_name = 'mourning-wail-page-visit'
 
-    def get(self, request, node_guid):
+    def post(self, request):
         qparams = request.GET
+
         record_page_visit(
             node_guid=node_guid,
             page_path=qparams.get('page_path'),
             page_title=qparams.get('page_title'),
             referer_domain=qparams.get('referer_domain'),
+        )
+        return HttpResponse(status=201)
+
+
+class MourningWailPageVisit(GenericAPIView):
+    # for compatibility with the requests we were sending to keen.io
+    # "keen (noun): a mourning wail"
+
+    view_category = 'metrics'
+    view_name = 'mourning-wail-page-visit'
+
+    def post(self, request):
+        keen_payload = request.json()
+
+        record_page_visit(
+            # TODO-quest
         )
         return HttpResponse(status=201)
