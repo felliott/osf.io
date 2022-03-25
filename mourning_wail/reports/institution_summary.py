@@ -3,31 +3,21 @@ django.setup()
 
 import pytz
 import logging
-from dateutil.parser import parse
 from datetime import datetime, timedelta
 
 from django.db.models import Q
-from django.utils import timezone
 
-from framework.encryption import ensure_bytes
 from osf.models import Institution
-from website.app import init_app
-from scripts.analytics.base import SummaryAnalytics
+from mourning_wail.metrics import DailyReport
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-class InstitutionSummary(SummaryAnalytics):
-
-    @property
-    def collection_name(self):
-        return 'institution_summary'
-
-    def get_events(self, date):
-        super(InstitutionSummary, self).get_events(date)
-
+class InstitutionSummaryReport(DailyReport):
+    @classmethod
+    def get_daily_report(cls, date):
         institutions = Institution.objects.all()
         counts = []
 
@@ -113,20 +103,3 @@ class InstitutionSummary(SummaryAnalytics):
 
             counts.append(count)
         return counts
-
-
-def get_class():
-    return InstitutionSummary
-
-
-if __name__ == '__main__':
-    init_app()
-    institution_summary = InstitutionSummary()
-    args = institution_summary.parse_args()
-    yesterday = args.yesterday
-    if yesterday:
-        date = (timezone.now() - timedelta(days=1)).date()
-    else:
-        date = parse(args.date).date() if args.date else None
-    events = institution_summary.get_events(date)
-    institution_summary.send_events(events)

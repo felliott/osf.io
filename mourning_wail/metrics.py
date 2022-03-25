@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.utils import timezone
 
 from elasticsearch_metrics import metrics
@@ -18,8 +20,8 @@ class MeteredEvent(metrics.Metric):
         # source = metrics.MetaField(enabled=True)
 
 
-class MeteredReport(metrics.Metric):
-    """MeteredReport (abstract base for report-based metrics)
+class DailyReport(metrics.Metric):
+    """DailyReport (abstract base for report-based metrics)
 
     There's something we'd like to know about every so often,
     so let's regularly run a report and stash the results here
@@ -34,8 +36,25 @@ class MeteredReport(metrics.Metric):
         # source = metrics.MetaField(enabled=True)
 
     @classmethod
-    def run_report(cls):
-        raise NotImplementedError(f'{cls.__name__} must implement run_report')
+    def run_and_record_daily_report(cls, date=None):
+        if date is None:
+            yesterday = (timezone.now() - timedelta(days=1)).date()
+            date = yesterday
+
+        time_report_started = timezone.now()
+        daily_report = cls.get_daily_report(date)
+        time_report_finished = timezone.now()
+
+        run_duration = (time_report_finished - time_report_started)
+
+        cls.record(
+            **daily_report,
+            run_duration_milliseconds=run_duration / timedelta(milliseconds=1),
+        )
+
+    @classmethod
+    def get_daily_report(cls, date):
+        raise NotImplementedError(f'{cls.__name__} must implement run_daily_report')
 
 ##### END BASES #####
 
@@ -72,31 +91,3 @@ class SystemLogEvent(MeteredEvent):
     pass  # TODO
 
 ##### END EVENTS #####
-
-
-##### BEGIN REPORTS #####
-
-class StorageUsageReport(MeteredReport):
-    pass  # TODO
-
-
-class TotalUsersReport(MeteredReport):
-    pass  # TODO
-
-
-class TotalRegistrationsReport(MeteredReport):
-    pass  # TODO
-
-
-class TotalFilesReport(MeteredReport):
-    pass  # TODO
-
-
-class TotalProjectsReport(MeteredReport):
-    pass  # TODO
-
-
-class TotalPreprintsReport(MeteredReport):
-    pass  # TODO
-
-##### END REPORTS #####

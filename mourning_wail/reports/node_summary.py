@@ -1,29 +1,19 @@
-import django
-django.setup()
-
 from django.db.models import Q
 import pytz
 import logging
-from dateutil.parser import parse
 from datetime import datetime, timedelta
-from django.utils import timezone
 
-from website.app import init_app
-from scripts.analytics.base import SummaryAnalytics
+from mourning_wail.metrics import DailyReport
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-class NodeSummary(SummaryAnalytics):
+class NodeCountReport(DailyReport):
 
-    @property
-    def collection_name(self):
-        return 'node_summary'
-
-    def get_events(self, date):
-        super(NodeSummary, self).get_events(date)
+    @classmethod
+    def get_daily_report(cls, date):
         from osf.models import Node, Registration
         from osf.models.spam import SpamStatus
 
@@ -113,20 +103,3 @@ class NodeSummary(SummaryAnalytics):
 
         logger.info(totals)
         return [totals]
-
-
-def get_class():
-    return NodeSummary
-
-
-if __name__ == '__main__':
-    init_app()
-    node_summary = NodeSummary()
-    args = node_summary.parse_args()
-    yesterday = args.yesterday
-    if yesterday:
-        date = (timezone.now() - timedelta(days=1)).date()
-    else:
-        date = parse(args.date).date() if args.date else None
-    events = node_summary.get_events(date)
-    node_summary.send_events(events)

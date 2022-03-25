@@ -1,24 +1,19 @@
 from __future__ import division
 
-import django
-django.setup()
 from keen import KeenClient
 import logging
 import pytz
 import requests
 
-from dateutil.parser import parse
 from datetime import datetime, timedelta
 from django.db.models import Q
-from django.utils import timezone
 from keen import exceptions as keen_exceptions
 
 from osf.models import OSFUser
-from website.app import init_app
 from website import settings
 from framework.database import paginated
 from framework import sentry
-from scripts.analytics.base import SummaryAnalytics
+from mourning_wail.metrics import DailyReport
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -37,13 +32,9 @@ def count_user_logs(user):
     return length
 
 
-class UserSummary(SummaryAnalytics):
-
-    @property
-    def collection_name(self):
-        return 'user_summary'
-
-    def calculate_stickiness(self, time_one, time_two):
+class UserCountReport(DailyReport):
+    @classmethod
+    def calculate_stickiness(cls, time_one, time_two):
         """Calculate the stickiness for date: (Unique users yesterday) / (Unique users over yesterday + 29 days) [total of 30 days]"""
         client = KeenClient(
             project_id=settings.KEEN['public']['project_id'],
@@ -71,9 +62,8 @@ class UserSummary(SummaryAnalytics):
             return 0
         return last_one / last_thirty
 
-    def get_events(self, date):
-        super(UserSummary, self).get_events(date)
-
+    @classmethod
+    def get_daily_report(cls, date):
         # Convert to a datetime at midnight for queries and the timestamp
         timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
         query_datetime = timestamp_datetime + timedelta(days=1)
@@ -117,7 +107,7 @@ class UserSummary(SummaryAnalytics):
 
         try:
             # Because this data reads from Keen it could fail if Keen read api fails while writing is still allowed
-            counts['status']['stickiness'] = self.calculate_stickiness(timestamp_datetime, query_datetime)
+            counts['status']['stickiness'] = cls.calculate_stickiness(timestamp_datetime, query_datetime)
         except (requests.exceptions.ConnectionError, keen_exceptions.InvalidProjectIdError):
             sentry.log_message('Unable to read from Keen. stickiness metric not collected for date {}'.format(timestamp_datetime.isoformat()))
 
@@ -132,20 +122,3 @@ class UserSummary(SummaryAnalytics):
             )
         )
         return [counts]
-
-
-def get_class():
-    return UserSummary
-
-
-if __name__ == '__main__':
-    init_app()
-    user_summary = UserSummary()
-    args = user_summary.parse_args()
-    yesterday = args.yesterday
-    if yesterday:
-        date = (timezone.now() - timedelta(days=1)).date()
-    else:
-        date = parse(args.date).date() if args.date else None
-    events = user_summary.get_events(date)
-    user_summary.send_events(events)

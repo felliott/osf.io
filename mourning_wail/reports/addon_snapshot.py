@@ -8,7 +8,7 @@ init_app()
 
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
-from scripts.analytics.base import SnapshotAnalytics
+from mourning_wail.metrics import DailyReport
 from website.settings import ADDONS_AVAILABLE
 
 logger = logging.getLogger(__name__)
@@ -65,15 +65,9 @@ def get_enabled_authorized_linked(user_settings_list, has_external_account, shor
     }
 
 
-class AddonSnapshot(SnapshotAnalytics):
-
-    @property
-    def collection_name(self):
-        return 'addon_snapshot'
-
-    def get_events(self, date=None):
-        super(AddonSnapshot, self).get_events(date)
-
+class AddonUsageReport(DailyReport):
+    @classmethod
+    def get_daily_report(cls):
         counts = []
         addons_available = {k: v for k, v in [(addon.short_name, addon) for addon in ADDONS_AVAILABLE]}
 
@@ -121,13 +115,3 @@ class AddonSnapshot(SnapshotAnalytics):
                 )
             )
         return counts
-
-
-def get_class():
-    return AddonSnapshot
-
-
-if __name__ == '__main__':
-    addon_snapshot = AddonSnapshot()
-    events = addon_snapshot.get_events()
-    addon_snapshot.send_events(events)
