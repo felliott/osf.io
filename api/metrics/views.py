@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.exceptions import ValidationError
 from rest_framework import permissions as drf_permissions
 from rest_framework.generics import GenericAPIView
@@ -17,8 +17,6 @@ from api.base.waffle_decorators import require_switch
 from elasticsearch_dsl.connections import get_connection
 
 from osf.features import ENABLE_RAW_METRICS
-
-from .mourningwail import get_node_analytics, record_page_visit
 
 
 class PreprintMetricMixin(JSONAPIBaseView):
@@ -220,49 +218,3 @@ class RegistriesModerationMetricsView(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return JsonResponse(RegistriesModerationMetrics.get_registries_info())
-
-
-class NodeAnalytics(GenericAPIView):
-    permission_classes = (
-        # TODO ...is this just open to the wild public?
-    )
-
-    view_category = 'metrics'
-    view_name = 'node-analytics'
-
-    def get(self, request, node_guid, timespan):
-        return JsonResponse(
-            get_node_analytics(node_guid, timespan)
-        )
-
-
-class PageVisit(GenericAPIView):
-    view_category = 'metrics'
-    view_name = 'mourning-wail-page-visit'
-
-    def post(self, request):
-        qparams = request.GET
-
-        record_page_visit(
-            node_guid=node_guid,
-            page_path=qparams.get('page_path'),
-            page_title=qparams.get('page_title'),
-            referer_domain=qparams.get('referer_domain'),
-        )
-        return HttpResponse(status=201)
-
-
-class MourningWailPageVisit(GenericAPIView):
-    # for compatibility with the requests we were sending to keen.io
-    # "keen (noun): a mourning wail"
-
-    view_category = 'metrics'
-    view_name = 'mourning-wail-page-visit'
-
-    def post(self, request):
-        keen_payload = request.json()
-
-        record_page_visit(
-            # TODO-quest
-        )
-        return HttpResponse(status=201)

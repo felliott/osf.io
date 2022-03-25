@@ -1,14 +1,5 @@
-"""
-a temporary(?) keen replacement
-
-"keen (noun): a mourning wail"
-"""
-
 from enum import Enum
 import logging
-from typing import Optional
-
-from django.utils import timezone
 
 from osf.metrics import PageVisit
 
@@ -100,15 +91,3 @@ def get_node_analytics(node_guid: str, timespan: str):
         agg_name: analytics_results.aggregations[agg_name].to_dict()
         for agg_name in MW_AGGREGATIONS
     }
-
-
-def record_page_visit(node_guid: str, page_path: str, page_title: str, referer_domain: Optional[str] = None):
-    timestamp = timezone.now()
-    PageVisit.record(
-        timestamp=timestamp,
-        hour_of_day=timestamp.hour,
-        page_title=page_title,
-        page_path=page_path,
-        referer_domain=referer_domain,
-    )
-    # TODO handle dead elastic gracefully (ideally without losing data)
