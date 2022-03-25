@@ -528,14 +528,3 @@ class RegistriesModerationMetrics(MetricMixin, metrics.Metric):
                 }
             }
         }).execute().aggregations['providers'].to_dict()
-
-
-class PageVisit(metrics.Metric):
-    referer_domain = metrics.Keyword()
-    hour_of_day = metrics.Integer()
-    page_title = metrics.Keyword(copy_to='path_n_title')
-    page_path = metrics.Keyword(copy_to='path_n_title')
-    path_n_title = metrics.Keyword()
-
-    class Meta:
-        dynamic = metrics.MetaField('strict')
