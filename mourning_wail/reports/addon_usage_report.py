@@ -2,10 +2,6 @@ from __future__ import absolute_import
 
 import logging
 
-# App must be initialized before models or ADDONS_AVAILABLE are available
-from website.app import init_app
-init_app()
-
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
 from mourning_wail.metrics import DailyReport
