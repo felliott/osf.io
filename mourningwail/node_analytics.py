@@ -26,11 +26,6 @@ MW_AGGREGATIONS = {
         'terms': {
             'field': 'hour_of_day',
             'size': 24,
-            # TODO either make hour_of_day field exist or do this instead:
-            # 'script': {
-            #     'lang': 'painless',
-            #     'source': 'doc["timestamp"].value.getHour()',
-            # },
         },
     },
     'referer-domain': {
@@ -41,8 +36,8 @@ MW_AGGREGATIONS = {
     },
     'popular-pages': {
         'terms': {
-            'field': 'path_n_title',  # TODO build composite field with copy_to mapping?
-            'exclude': '.*/project/.*',  # TODO verify this works
+            'field': 'path_n_title',  # TODO-quest build composite field with copy_to mapping?
+            'exclude': '.*/project/.*',  # TODO-quest verify this works
             'size': 10,
         },
     },

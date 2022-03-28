@@ -9,7 +9,7 @@ from mourningwail.node_analytics import get_node_analytics
 
 class NodeAnalytics(APIView):
     permission_classes = (
-        ContributorOrPublic,  # TODO check this
+        ContributorOrPublic,  # TODO-quest: check this
     )
 
     view_category = 'metrics'
@@ -28,8 +28,8 @@ class PageVisit(APIView):
     def post(self, request):
         request_bod = request.POST
 
-        # TODO check for obvious fakery
-        # TODO handle dead elastic gracefully (ideally without losing data)
+        # TODO-quest: check for obvious fakery
+        # TODO-quest: handle dead elastic gracefully (ideally without losing data)
 
         PageVisitEvent.record(
             node_guid=request_bod.get('node_guid'),
@@ -51,6 +51,6 @@ class MourningwailPageVisit(APIView):
         # keen_payload = request.json()
 
         PageVisitEvent.record(
-            # TODO translate from keen load
+            # TODO-quest: translate from keen load
         )
         return HttpResponse(status=201)

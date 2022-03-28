@@ -8,7 +8,7 @@ class PageVisitEvent(MeteredEvent):
     referer_domain = metrics.Keyword()
     hour_of_day = metrics.Integer()
 
-    # TODO i don't think copy_to works this way
+    # TODO-quest i don't think copy_to works this way
     page_title = metrics.Keyword(copy_to='path_n_title')
     page_path = metrics.Keyword(copy_to='path_n_title')
     path_n_title = metrics.Keyword()

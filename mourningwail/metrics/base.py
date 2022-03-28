@@ -14,7 +14,7 @@ class MeteredEvent(metrics.Metric):
 
     class Meta:
         abstract = True
-        dynamic = metrics.MetaField('strict')  # TODO: is this inherited?
+        dynamic = metrics.MetaField('strict')  # TODO-quest: is this inherited?
         # source = metrics.MetaField(enabled=True)
 
 
@@ -30,7 +30,7 @@ class DailyReport(metrics.Metric):
 
     class Meta:
         abstract = True
-        dynamic = metrics.MetaField('strict')  # TODO: is this inherited?
+        dynamic = metrics.MetaField('strict')  # TODO-quest: is this inherited?
         # source = metrics.MetaField(enabled=True)
 
     @classmethod

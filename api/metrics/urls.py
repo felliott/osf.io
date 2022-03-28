@@ -14,5 +14,5 @@ urlpatterns = [
     # mourning wail (keen replacement)
     url(r'^node_analytics/(?P<node_guid>[a-z0-9]+)/(?P<timespan>week|fortnight|month)/$', mw_views.NodeAnalytics.as_view(), name=mw_views.NodeAnalytics.view_name),
     url(r'^page_visit/$', mw_views.PageVisit.as_view(), name=mw_views.PageVisit.view_name),
-    # TODO endpoint for full back-compat with existing keen usage
+    # TODO-quest: endpoint for full back-compat with existing keen usage
 ]
