@@ -1,7 +1,5 @@
 from django.db.models import Q
-import pytz
 import logging
-from datetime import datetime, timedelta
 
 from mourningwail.metrics.base import DailyReport
 
@@ -13,33 +11,29 @@ logging.basicConfig(level=logging.INFO)
 class NodeCountReport(DailyReport):
 
     @classmethod
-    def run_daily_report(cls, date):
+    def run_daily_report(cls, day_start, day_end):
         from osf.models import Node, Registration
         from osf.models.spam import SpamStatus
 
-        # Convert to a datetime at midnight for queries and the timestamp
-        timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
-        query_datetime = timestamp_datetime + timedelta(days=1)
-
-        node_qs = Node.objects.filter(is_deleted=False, created__lte=query_datetime)
-        registration_qs = Registration.objects.filter(is_deleted=False, created__lte=query_datetime)
+        node_qs = Node.objects.filter(is_deleted=False, created__lte=day_end)
+        registration_qs = Registration.objects.filter(is_deleted=False, created__lte=day_end)
 
         public_query = Q(is_public=True)
         private_query = Q(is_public=False)
 
         # node_query encompasses lte query_datetime
-        daily_query = Q(created__gte=timestamp_datetime)
+        daily_query = Q(created__gte=day_start)
         retracted_query = Q(retraction__isnull=False)
 
         # `embargoed` used private status to determine embargoes, but old registrations could be private and unapproved registrations can also be private
         # `embargoed_v2` uses future embargo end dates on root
-        embargo_v2_query = Q(root__embargo__end_date__gt=query_datetime)
+        embargo_v2_query = Q(root__embargo__end_date__gt=day_end)
 
         exclude_spam = ~Q(spam_status__in=[SpamStatus.SPAM, SpamStatus.FLAGGED])
 
         totals = {
             'keen': {
-                'timestamp': timestamp_datetime.isoformat()
+                'timestamp': day_start.isoformat()
             },
             # Nodes - the number of projects and components
             'nodes': {

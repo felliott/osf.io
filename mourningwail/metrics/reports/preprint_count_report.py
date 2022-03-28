@@ -1,8 +1,5 @@
-import pytz
-
 import logging
 import requests
-from datetime import datetime, timedelta
 
 from mourningwail.metrics.base import DailyReport
 
@@ -14,12 +11,8 @@ LOG_THRESHOLD = 11
 
 class PreprintCountReport(DailyReport):
     @classmethod
-    def run_daily_report(cls, date):
+    def run_daily_report(cls, day_start, day_end):
         from osf.models import PreprintProvider
-
-        # Convert to a datetime at midnight for queries and the timestamp
-        timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
-        query_datetime = timestamp_datetime + timedelta(days=1)
 
         elastic_query = {
             'query': {
@@ -40,7 +33,7 @@ class PreprintCountReport(DailyReport):
                         {
                             'range': {
                                 'date': {
-                                    'lte': '{}||/d'.format(query_datetime.strftime('%Y-%m-%d'))
+                                    'lte': '{}||/d'.format(day_end.strftime('%Y-%m-%d'))
                                 }
                             }
                         }
@@ -56,7 +49,7 @@ class PreprintCountReport(DailyReport):
             resp = requests.post('https://share.osf.io/api/v2/search/creativeworks/_search', json=elastic_query).json()
             counts.append({
                 'keen': {
-                    'timestamp': timestamp_datetime.isoformat()
+                    'timestamp': day_start.isoformat()
                 },
                 'provider': {
                     'name': preprint_provider.name,

@@ -14,7 +14,7 @@ class TestNodeAnalytics:
     def test_get_analytics(self, app):
         node = NodeFactory()
 
-        # TODO: PageView.record(...) sev'ral times
+        # TODO-quest: PageView.record(...) sev'ral times
 
         node_analytics_url = f'/_/metrics/node_analytics/{node._id}/week/'
         response = app.get(node_analytics_url)

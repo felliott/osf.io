@@ -1,20 +1,16 @@
-import pytz
-from datetime import datetime
-
-
 from mourningwail.metrics.base import DailyReport
 from osf.models import PageCounter
 
 
 class DownloadCountReport(DailyReport):
     @classmethod
-    def run_daily_report(cls, date):
-        timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
+    def run_daily_report(cls, day_start, day_end):
         return [{
                 'keen': {
-                    'timestamp': timestamp_datetime.isoformat()
+                    'timestamp': day_start.isoformat()
                 },
                 'files': {
-                    'total': int(PageCounter.get_all_downloads_on_date(timestamp_datetime) or 0)
+                    'total': int(PageCounter.get_all_downloads_on_date(day_start) or 0)
                 },
-        }]
+                }
+                ]

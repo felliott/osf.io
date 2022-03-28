@@ -2,10 +2,9 @@ from __future__ import division
 
 from keen import KeenClient
 import logging
-import pytz
 import requests
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.conf import settings
 from django.db.models import Q
 from keen import exceptions as keen_exceptions
@@ -63,18 +62,14 @@ class UserCountReport(DailyReport):
         return last_one / last_thirty
 
     @classmethod
-    def run_daily_report(cls, date):
-        # Convert to a datetime at midnight for queries and the timestamp
-        timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
-        query_datetime = timestamp_datetime + timedelta(days=1)
-
+    def run_daily_report(cls, day_start, day_end):
         active_user_query = (
             Q(is_registered=True) &
             Q(password__isnull=False) &
             Q(merged_by__isnull=True) &
             Q(date_disabled__isnull=True) &
             Q(date_confirmed__isnull=False) &
-            Q(date_confirmed__lt=query_datetime)
+            Q(date_confirmed__lt=day_end)
         )
 
         active_users = 0
@@ -88,28 +83,28 @@ class UserCountReport(DailyReport):
                 depth_users += 1
             if user.social or user.schools or user.jobs:
                 profile_edited += 1
-        new_users = OSFUser.objects.filter(is_active=True, date_confirmed__gte=timestamp_datetime, date_confirmed__lt=query_datetime)
+        new_users = OSFUser.objects.filter(is_active=True, date_confirmed__gte=day_start, date_confirmed__lt=day_end)
         counts = {
             'keen': {
-                'timestamp': timestamp_datetime.isoformat()
+                'timestamp': day_start.isoformat()
             },
             'status': {
                 'active': active_users,
                 'depth': depth_users,
                 'new_users_daily': new_users.count(),
                 'new_users_with_institution_daily': new_users.filter(affiliated_institutions__isnull=False).count(),
-                'unconfirmed': OSFUser.objects.filter(date_registered__lt=query_datetime, date_confirmed__isnull=True).count(),
-                'deactivated': OSFUser.objects.filter(date_disabled__isnull=False, date_disabled__lt=query_datetime).count(),
-                'merged': OSFUser.objects.filter(date_registered__lt=query_datetime, merged_by__isnull=False).count(),
+                'unconfirmed': OSFUser.objects.filter(date_registered__lt=day_end, date_confirmed__isnull=True).count(),
+                'deactivated': OSFUser.objects.filter(date_disabled__isnull=False, date_disabled__lt=day_end).count(),
+                'merged': OSFUser.objects.filter(date_registered__lt=day_end, merged_by__isnull=False).count(),
                 'profile_edited': profile_edited,
             }
         }
 
         try:
             # Because this data reads from Keen it could fail if Keen read api fails while writing is still allowed
-            counts['status']['stickiness'] = cls.calculate_stickiness(timestamp_datetime, query_datetime)
+            counts['status']['stickiness'] = cls.calculate_stickiness(day_start, day_end)
         except (requests.exceptions.ConnectionError, keen_exceptions.InvalidProjectIdError):
-            sentry.log_message('Unable to read from Keen. stickiness metric not collected for date {}'.format(timestamp_datetime.isoformat()))
+            sentry.log_message('Unable to read from Keen. stickiness metric not collected for date {}'.format(day_start.isoformat()))
 
         logger.info(
             'Users counted. Active: {}, Depth: {}, Unconfirmed: {}, Deactivated: {}, Merged: {}, Profile Edited: {}'.format(

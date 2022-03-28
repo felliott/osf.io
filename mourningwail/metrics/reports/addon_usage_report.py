@@ -64,7 +64,8 @@ def get_enabled_authorized_linked(user_settings_list, has_external_account, shor
 
 class AddonUsageReport(DailyReport):
     @classmethod
-    def run_daily_report(cls):
+    def run_daily_report(cls, day_start, day_end):
+        # TODO-quest: error if not being run for yesterday (or update to use day_start/day_end)
         counts = []
         addons_available = {
             addon.short_name: addon

@@ -1,6 +1,5 @@
 import pytz
 import logging
-from datetime import datetime, timedelta
 
 from django.db.models import Q
 
@@ -14,15 +13,13 @@ logging.basicConfig(level=logging.INFO)
 
 class NewUserDomainReport(DailyReport):
     @classmethod
-    def run_daily_report(cls, date):
-        # In the end, turn the date back into a datetime at midnight for queries
-        date = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
-
+    def run_daily_report(cls, day_start, day_end):
         logger.info('Gathering user domains between {} and {}'.format(
-            date, (date + timedelta(days=1)).isoformat()
+            day_start,
+            day_end,
         ))
-        user_query = (Q(date_confirmed__lt=date + timedelta(days=1)) &
-                      Q(date_confirmed__gte=date) &
+        user_query = (Q(date_confirmed__lt=day_end) &
+                      Q(date_confirmed__gte=day_start) &
                       Q(username__isnull=False))
         users = paginated(OSFUser, query=user_query)
         user_domain_events = []

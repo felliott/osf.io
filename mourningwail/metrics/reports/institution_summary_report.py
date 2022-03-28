@@ -1,6 +1,4 @@
-import pytz
 import logging
-from datetime import datetime, timedelta
 
 from django.db.models import Q
 
@@ -14,24 +12,21 @@ logging.basicConfig(level=logging.INFO)
 
 class InstitutionSummaryReport(DailyReport):
     @classmethod
-    def run_daily_report(cls, date):
+    def run_daily_report(cls, day_start, day_end):
         institutions = Institution.objects.all()
         counts = []
 
-        # Convert to a datetime at midnight for queries and the timestamp
-        timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
-        query_datetime = timestamp_datetime + timedelta(days=1)
-        daily_query = Q(created__gte=timestamp_datetime)
+        daily_query = Q(created__gte=day_start)
         public_query = Q(is_public=True)
         private_query = Q(is_public=False)
 
         # `embargoed` used private status to determine embargoes, but old registrations could be private and unapproved registrations can also be private
         # `embargoed_v2` uses future embargo end dates on root
-        embargo_v2_query = Q(root__embargo__end_date__gt=query_datetime)
+        embargo_v2_query = Q(root__embargo__end_date__gt=day_end)
 
         for institution in institutions:
-            node_qs = institution.nodes.filter(is_deleted=False, created__lt=query_datetime).exclude(type='osf.registration')
-            registration_qs = institution.nodes.filter(is_deleted=False, created__lt=query_datetime, type='osf.registration')
+            node_qs = institution.nodes.filter(is_deleted=False, created__lt=day_end).exclude(type='osf.registration')
+            registration_qs = institution.nodes.filter(is_deleted=False, created__lt=day_end, type='osf.registration')
 
             count = {
                 'institution': {
@@ -40,7 +35,7 @@ class InstitutionSummaryReport(DailyReport):
                 },
                 'users': {
                     'total': institution.osfuser_set.filter(is_active=True).count(),
-                    'total_daily': institution.osfuser_set.filter(date_confirmed__gte=timestamp_datetime, date_confirmed__lt=query_datetime).count(),
+                    'total_daily': institution.osfuser_set.filter(date_confirmed__gte=day_start, date_confirmed__lt=day_end).count(),
                 },
                 'nodes': {
                     'total': node_qs.count(),
@@ -84,7 +79,7 @@ class InstitutionSummaryReport(DailyReport):
                     'embargoed_v2_daily': registration_qs.filter(private_query & daily_query & embargo_v2_query).get_roots().count(),
                 },
                 'keen': {
-                    'timestamp': timestamp_datetime.isoformat()
+                    'timestamp': day_start.isoformat()
                 }
             }
 
