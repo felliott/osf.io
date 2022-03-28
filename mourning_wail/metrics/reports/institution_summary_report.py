@@ -1,6 +1,3 @@
-import django
-django.setup()
-
 import pytz
 import logging
 from datetime import datetime, timedelta

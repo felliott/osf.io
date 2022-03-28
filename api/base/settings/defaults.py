@@ -96,7 +96,6 @@ INSTALLED_APPS = (
 
     # OSF
     'osf',
-    'mourning_wail',
 
     # Addons
     'addons.osfstorage',
@@ -116,6 +115,9 @@ INSTALLED_APPS = (
     'addons.twofactor',
     'addons.wiki',
     'addons.zotero',
+
+    # metrics
+    'mourning_wail',
 )
 
 # local development using https

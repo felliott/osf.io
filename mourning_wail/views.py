@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 
 from api.nodes.permissions import ContributorOrPublic
 
-from mourning_wail.metrics import PageVisitEvent
+from mourning_wail.metrics.events import PageVisitEvent
 from mourning_wail.node_analytics import get_node_analytics
 
 

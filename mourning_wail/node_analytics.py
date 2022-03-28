@@ -1,7 +1,7 @@
 from enum import Enum
 import logging
 
-from osf.metrics import PageVisit
+from mourning_wail.metrics.events import PageVisitEvent
 
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ def build_query_payload(node_guid: str, timespan: MwTimespan):
 
 
 def get_node_analytics(node_guid: str, timespan: str):
-    analytics_search = PageVisit.search().update_from_dict(
+    analytics_search = PageVisitEvent.search().update_from_dict(
         build_query_payload(node_guid, MwTimespan(timespan))
     )
     logger.warn(analytics_search.to_dict())
