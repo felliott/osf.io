@@ -2,10 +2,11 @@ from __future__ import absolute_import
 
 import logging
 
+from django.conf import settings
+
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
 from mourning_wail.metrics.base import DailyReport
-from website import settings
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)

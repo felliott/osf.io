@@ -6,11 +6,11 @@ import pytz
 import requests
 
 from datetime import datetime, timedelta
+from django.conf import settings
 from django.db.models import Q
 from keen import exceptions as keen_exceptions
 
 from osf.models import OSFUser
-from website import settings
 from framework.database import paginated
 from framework import sentry
 from mourning_wail.metrics.base import DailyReport

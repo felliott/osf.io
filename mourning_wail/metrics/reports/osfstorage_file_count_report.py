@@ -33,7 +33,7 @@ class OsfstorageFileCountReport(DailyReport):
 
         daily_query = Q(
             created__gte=date,
-            created_lt=(date + timedelta(days=1)),
+            created__lt=(date + timedelta(days=1)),
         )
 
         totals = {

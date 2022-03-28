@@ -401,7 +401,6 @@ class CeleryConfig:
         'framework.celery_tasks',
         'scripts.osfstorage.usage_audit',
         'scripts.stuck_registration_audit',
-        'mourning_wail.tasks',
         'scripts.populate_new_and_noteworthy_projects',
         'scripts.populate_popular_projects_and_registrations',
         'website.search.elastic_search',
@@ -418,7 +417,8 @@ class CeleryConfig:
         'osf.management.commands.sync_collection_provider_indices',
         'osf.management.commands.sync_datacite_doi_metadata',
         'osf.management.commands.update_institution_project_counts',
-        'osf.management.commands.populate_branched_from'
+        'osf.management.commands.populate_branched_from',
+        'mourning_wail.tasks',
     }
 
     med_pri_modules = {
@@ -497,9 +497,6 @@ class CeleryConfig:
         'scripts.triggered_mails',
         'scripts.clear_sessions',
         'scripts.send_queued_mails',
-        'scripts.analytics.run_keen_summaries',
-        'scripts.analytics.run_keen_snapshots',
-        'scripts.analytics.run_keen_events',
         'scripts.generate_sitemap',
         'scripts.premigrate_created_modified',
         'scripts.add_missing_identifiers_to_preprints',
@@ -515,7 +512,8 @@ class CeleryConfig:
         'osf.management.commands.approve_pending_schema_responses',
         'osf.management.commands.delete_legacy_quickfiles_nodes',
         'osf.management.commands.fix_quickfiles_waterbutler_logs',
-        'api.providers.tasks'
+        'api.providers.tasks',
+        'mourning_wail.tasks',
     )
 
     # Modules that need metrics and release requirements
