@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 
 from osf.models import Institution
-from mourning_wail.metrics.base import DailyReport
+from mourningwail.metrics.base import DailyReport
 
 
 logger = logging.getLogger(__name__)

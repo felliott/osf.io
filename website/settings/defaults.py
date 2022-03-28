@@ -418,7 +418,7 @@ class CeleryConfig:
         'osf.management.commands.sync_datacite_doi_metadata',
         'osf.management.commands.update_institution_project_counts',
         'osf.management.commands.populate_branched_from',
-        'mourning_wail.tasks',
+        'mourningwail.tasks',
     }
 
     med_pri_modules = {
@@ -513,7 +513,7 @@ class CeleryConfig:
         'osf.management.commands.delete_legacy_quickfiles_nodes',
         'osf.management.commands.fix_quickfiles_waterbutler_logs',
         'api.providers.tasks',
-        'mourning_wail.tasks',
+        'mourningwail.tasks',
     )
 
     # Modules that need metrics and release requirements

@@ -2,7 +2,7 @@ import pytz
 from datetime import datetime
 
 
-from mourning_wail.metrics.base import DailyReport
+from mourningwail.metrics.base import DailyReport
 from osf.models import PageCounter
 
 

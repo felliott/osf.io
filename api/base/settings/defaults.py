@@ -117,7 +117,7 @@ INSTALLED_APPS = (
     'addons.zotero',
 
     # metrics
-    'mourning_wail',
+    'mourningwail',
 )
 
 # local development using https

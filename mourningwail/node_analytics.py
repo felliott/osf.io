@@ -1,7 +1,7 @@
 from enum import Enum
 import logging
 
-from mourning_wail.metrics.events import PageVisitEvent
+from mourningwail.metrics.events import PageVisitEvent
 
 
 logger = logging.getLogger(__name__)

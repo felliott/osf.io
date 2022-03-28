@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 
 from api.nodes.permissions import ContributorOrPublic
 
-from mourning_wail.metrics.events import PageVisitEvent
-from mourning_wail.node_analytics import get_node_analytics
+from mourningwail.metrics.events import PageVisitEvent
+from mourningwail.node_analytics import get_node_analytics
 
 
 class NodeAnalytics(APIView):
@@ -40,7 +40,7 @@ class PageVisit(APIView):
         return HttpResponse(status=201)
 
 
-class MourningWailPageVisit(APIView):
+class MourningwailPageVisit(APIView):
     # for compatibility with the requests we were sending to keen.io
     # "keen (noun): a mourning wail"
 

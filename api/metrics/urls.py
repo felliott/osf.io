@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from . import views
-from mourning_wail import views as mw_views
+from mourningwail import views as mw_views
 
 app_name = 'osf'
 

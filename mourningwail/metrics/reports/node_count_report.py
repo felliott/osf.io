@@ -3,7 +3,7 @@ import pytz
 import logging
 from datetime import datetime, timedelta
 
-from mourning_wail.metrics.base import DailyReport
+from mourningwail.metrics.base import DailyReport
 
 
 logger = logging.getLogger(__name__)

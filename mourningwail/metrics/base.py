@@ -19,7 +19,7 @@ class MeteredEvent(metrics.Metric):
 
 
 class DailyReport(metrics.Metric):
-    """DailyReport (abstract base for the report-based metrics in mourning_wail.reports)
+    """DailyReport (abstract base for the report-based metrics in mourningwail.reports)
 
     There's something we'd like to know about every so often,
     so let's regularly run a report and stash the results here

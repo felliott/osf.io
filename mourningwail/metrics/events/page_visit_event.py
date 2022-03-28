@@ -1,7 +1,7 @@
 from django.utils import timezone
 from elasticsearch_metrics import metrics
 
-from mourning_wail.metrics.base import MeteredEvent
+from mourningwail.metrics.base import MeteredEvent
 
 
 class PageVisitEvent(MeteredEvent):

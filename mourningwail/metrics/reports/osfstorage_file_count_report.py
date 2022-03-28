@@ -4,7 +4,7 @@ import logging
 from datetime import timedelta
 
 from osf.models import AbstractNode, Preprint
-from mourning_wail.metrics.base import DailyReport
+from mourningwail.metrics.base import DailyReport
 
 
 logger = logging.getLogger(__name__)

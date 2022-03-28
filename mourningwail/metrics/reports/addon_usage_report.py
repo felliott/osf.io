@@ -6,7 +6,7 @@ from django.conf import settings
 
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
-from mourning_wail.metrics.base import DailyReport
+from mourningwail.metrics.base import DailyReport
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
