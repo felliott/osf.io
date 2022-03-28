@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 
 from osf.models import Institution
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 
 class InstitutionSummaryReport(DailyReport):
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         institutions = Institution.objects.all()
         counts = []
 

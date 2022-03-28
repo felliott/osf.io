@@ -2,13 +2,13 @@ import pytz
 from datetime import datetime
 
 
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 from osf.models import PageCounter
 
 
 class DownloadCountReport(DailyReport):
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
         return [{
                 'keen': {

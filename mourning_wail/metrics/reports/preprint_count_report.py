@@ -4,7 +4,7 @@ import logging
 import requests
 from datetime import datetime, timedelta
 
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -14,7 +14,7 @@ LOG_THRESHOLD = 11
 
 class PreprintCountReport(DailyReport):
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         from osf.models import PreprintProvider
 
         # Convert to a datetime at midnight for queries and the timestamp

@@ -21,7 +21,7 @@ class MeteredEvent(metrics.Metric):
 
 
 class DailyReport(metrics.Metric):
-    """DailyReport (abstract base for report-based metrics)
+    """DailyReport (abstract base for the report-based metrics in mourning_wail.reports)
 
     There's something we'd like to know about every so often,
     so let's regularly run a report and stash the results here
@@ -36,24 +36,22 @@ class DailyReport(metrics.Metric):
         # source = metrics.MetaField(enabled=True)
 
     @classmethod
-    def run_and_record_daily_report(cls, date=None):
-        if date is None:
-            yesterday = (timezone.now() - timedelta(days=1)).date()
-            date = yesterday
-
+    def run_and_record_daily_report(cls, date):
+        # measure duration using wall-clock time (not cpu time),
+        # because a database likely does much of the work
         time_report_started = timezone.now()
-        daily_report = cls.get_daily_report(date)
+        daily_report = cls.run_daily_report(date)
         time_report_finished = timezone.now()
 
         run_duration = (time_report_finished - time_report_started)
 
         cls.record(
             **daily_report,
-            run_duration_milliseconds=run_duration / timedelta(milliseconds=1),
+            run_duration_milliseconds=(run_duration / timedelta(milliseconds=1)),
         )
 
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         raise NotImplementedError(f'{cls.__name__} must implement run_daily_report')
 
 ##### END BASES #####

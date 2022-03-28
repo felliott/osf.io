@@ -1,4 +1,0 @@
-
-DAILY_REPORTS = (
-
-)

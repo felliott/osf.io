@@ -4,7 +4,7 @@ import logging
 
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 from website.settings import ADDONS_AVAILABLE
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ def get_enabled_authorized_linked(user_settings_list, has_external_account, shor
 
 class AddonUsageReport(DailyReport):
     @classmethod
-    def get_daily_report(cls):
+    def run_daily_report(cls):
         counts = []
         addons_available = {k: v for k, v in [(addon.short_name, addon) for addon in ADDONS_AVAILABLE]}
 

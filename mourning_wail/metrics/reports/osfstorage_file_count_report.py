@@ -4,7 +4,7 @@ import logging
 from datetime import timedelta
 
 from osf.models import AbstractNode, Preprint
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 class OsfstorageFileCountReport(DailyReport):
 
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         from addons.osfstorage.models import OsfStorageFile
 
         file_qs = OsfStorageFile.objects

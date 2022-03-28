@@ -13,7 +13,7 @@ from osf.models import OSFUser
 from website import settings
 from framework.database import paginated
 from framework import sentry
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -63,7 +63,7 @@ class UserCountReport(DailyReport):
         return last_one / last_thirty
 
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         # Convert to a datetime at midnight for queries and the timestamp
         timestamp_datetime = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
         query_datetime = timestamp_datetime + timedelta(days=1)

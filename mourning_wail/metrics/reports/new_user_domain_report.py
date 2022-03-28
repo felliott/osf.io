@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from osf.models import OSFUser
 from framework.database import paginated
-from mourning_wail.metrics import DailyReport
+from mourning_wail.metrics.base import DailyReport
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 class NewUserDomainReport(DailyReport):
     @classmethod
-    def get_daily_report(cls, date):
+    def run_daily_report(cls, date):
         # In the end, turn the date back into a datetime at midnight for queries
         date = datetime(date.year, date.month, date.day).replace(tzinfo=pytz.UTC)
 
