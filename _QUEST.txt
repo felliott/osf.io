@@ -23,8 +23,12 @@ REPORTS are generated periodically
 
 
 
-important new code locations:
-    mourningwail.metrics
-    mourningwail.metrics.events
-    mourningwail.metrics.reports
+new code regions:
+    mourningwail (new django app)
+    mourningwail.metrics (`elasticsearch_metrics.metrics.Metric` subclasses for events and reports)
 
+
+
+new api surface:
+    /_/metrics/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)
+    /_/page_visit/ (POST new page-visit events)
