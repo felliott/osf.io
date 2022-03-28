@@ -401,14 +401,11 @@ class CeleryConfig:
         'framework.celery_tasks',
         'scripts.osfstorage.usage_audit',
         'scripts.stuck_registration_audit',
-        'scripts.analytics.tasks',
+        'mourning_wail.tasks',
         'scripts.populate_new_and_noteworthy_projects',
         'scripts.populate_popular_projects_and_registrations',
         'website.search.elastic_search',
         'scripts.generate_sitemap',
-        'scripts.analytics.run_keen_summaries',
-        'scripts.analytics.run_keen_snapshots',
-        'scripts.analytics.run_keen_events',
         'scripts.clear_sessions',
         'osf.management.commands.delete_withdrawn_or_failed_registration_files',
         'osf.management.commands.check_crossref_dois',
@@ -612,20 +609,21 @@ class CeleryConfig:
                 'schedule': crontab(minute=45, hour=7, day_of_month=3),  # Third day of month 2:45 a.m.
                 'kwargs': {'dry_run': False}
             },
-            'run_keen_summaries': {
-                'task': 'scripts.analytics.run_keen_summaries',
-                'schedule': crontab(minute=0, hour=6),  # Daily 1:00 a.m.
-                'kwargs': {'yesterday': True}
-            },
+            # TODO-quest
+            #'run_keen_summaries': {
+            #    'task': 'scripts.analytics.run_keen_summaries',
+            #    'schedule': crontab(minute=0, hour=6),  # Daily 1:00 a.m.
+            #    'kwargs': {'yesterday': True}
+            #},
             # 'run_keen_snapshots': {
             #     'task': 'scripts.analytics.run_keen_snapshots',
             #     'schedule': crontab(minute=0, hour=8),  # Daily 3:00 a.m.
             # },
-            'run_keen_events': {
-                'task': 'scripts.analytics.run_keen_events',
-                'schedule': crontab(minute=0, hour=9),  # Daily 4:00 a.m.
-                'kwargs': {'yesterday': True}
-            },
+            #'run_keen_events': {
+            #    'task': 'scripts.analytics.run_keen_events',
+            #    'schedule': crontab(minute=0, hour=9),  # Daily 4:00 a.m.
+            #    'kwargs': {'yesterday': True}
+            #},
             # 'data_storage_usage': {
             #   'task': 'management.commands.data_storage_usage',
             #   'schedule': crontab(day_of_month=1, minute=30, hour=4),  # Last of the month at 11:30 p.m.

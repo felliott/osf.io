@@ -22,3 +22,9 @@ REPORTS are generated periodically
                       in the background
 
 
+
+important new code locations:
+    mourning_wail.metrics
+    mourning_wail.metrics.events
+    mourning_wail.metrics.reports
+

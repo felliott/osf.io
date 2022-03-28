@@ -5,7 +5,7 @@ import logging
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
 from mourning_wail.metrics.base import DailyReport
-from website.settings import ADDONS_AVAILABLE
+from website import settings
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -65,7 +65,10 @@ class AddonUsageReport(DailyReport):
     @classmethod
     def run_daily_report(cls):
         counts = []
-        addons_available = {k: v for k, v in [(addon.short_name, addon) for addon in ADDONS_AVAILABLE]}
+        addons_available = {
+            addon.short_name: addon
+            for addon in settings.ADDONS_AVAILABLE
+        }
 
         for short_name, addon in addons_available.items():
 
