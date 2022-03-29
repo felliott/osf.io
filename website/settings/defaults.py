@@ -608,11 +608,10 @@ class CeleryConfig:
                 'kwargs': {'dry_run': False}
             },
             # TODO-quest
-            #'run_keen_summaries': {
-            #    'task': 'scripts.analytics.run_keen_summaries',
-            #    'schedule': crontab(minute=0, hour=6),  # Daily 1:00 a.m.
-            #    'kwargs': {'yesterday': True}
-            #},
+            'run_daily_reports': {
+                'task': 'mourningwail.tasks.run_daily_reports',
+                'schedule': crontab(minute=0, hour=6),  # Daily 1:00 a.m.
+            },
             # 'run_keen_snapshots': {
             #     'task': 'scripts.analytics.run_keen_snapshots',
             #     'schedule': crontab(minute=0, hour=8),  # Daily 3:00 a.m.
