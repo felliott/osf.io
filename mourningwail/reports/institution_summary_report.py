@@ -3,7 +3,7 @@ import logging
 from django.db.models import Q
 
 from osf.models import Institution
-from mourningwail.metrics.base import DailyReport
+from ._base import DailyReport
 
 
 logger = logging.getLogger(__name__)

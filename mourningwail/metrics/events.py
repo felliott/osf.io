@@ -4,6 +4,10 @@ from elasticsearch_metrics import metrics
 from mourningwail.metrics._base import MeteredEvent
 
 
+class FileDownloadEvent(MeteredEvent):
+    file_guid = metrics.Keyword()
+
+
 class PageVisitEvent(MeteredEvent):
     referer_domain = metrics.Keyword()
     hour_of_day = metrics.Integer()
@@ -20,3 +24,11 @@ class PageVisitEvent(MeteredEvent):
             hour_of_day=timestamp.hour,
             **kwargs,
         )
+
+
+class SystemLogEvent(MeteredEvent):
+    pass  # TODO-quest
+
+
+class UiInteractionEvent(MeteredEvent):
+    pass  # TODO-quest

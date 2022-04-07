@@ -1,7 +1,7 @@
 from django.db.models import Q
 import logging
 
-from mourningwail.metrics.base import DailyReport
+from ._base import DailyReport
 
 
 logger = logging.getLogger(__name__)

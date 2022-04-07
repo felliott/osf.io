@@ -32,3 +32,23 @@ new code regions:
 new api surface:
     /_/metrics/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)
     /_/page_visit/ (POST new page-visit events)
+
+
+
+-----
+
+stirrin up names...
+
+    the basic types of datum for this metrics/analytics store are a handful of RECORD types:
+
+        a tool may leave a RECORD of how it has been used
+            => `UsageRecord`
+            => "at [this] time, [i] was used in [this] way"
+
+        a reporter (be they person or program) may publish a RECORD of what they have observed and synthesized
+            => `SynthesisRecord`
+            => "at [this] time, based on various observations, [i] believe [this] to be true"
+
+        a member of a community may post a RECORD of their objection, indifference, or agreement
+            => `ConsensusRecord`
+            => "at [this] time, [i] respond to [this] with [objection/agreement/indifference]"

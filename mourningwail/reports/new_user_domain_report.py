@@ -5,21 +5,20 @@ from django.db.models import Q
 
 from osf.models import OSFUser
 from framework.database import paginated
-from mourningwail.metrics.base import DailyReport
+from ._base import DailyReport
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
 class NewUserDomainReport(DailyReport):
-    @classmethod
-    def run_daily_report(cls, day_start, day_end):
-        logger.info('Gathering user domains between {} and {}'.format(
-            day_start,
-            day_end,
-        ))
-        user_query = (Q(date_confirmed__lt=day_end) &
-                      Q(date_confirmed__gte=day_start) &
+    def run_daily_report(self):
+
+    def backfill_report(self, date):
+        
+
+    def _run_report(self, date):
+        user_query = (Q(date_confirmed__date=date) &
                       Q(username__isnull=False))
         users = paginated(OSFUser, query=user_query)
         user_domain_events = []

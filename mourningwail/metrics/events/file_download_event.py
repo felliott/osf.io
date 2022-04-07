@@ -1,6 +1,6 @@
 from elasticsearch_metrics import metrics
 
-from mourningwail.metrics.base import MeteredEvent
+from mourningwail.metrics._base import MeteredEvent
 
 
 class FileDownloadEvent(MeteredEvent):

@@ -27,7 +27,3 @@ class MeteredReport(metrics.Metric):
         abstract = True
         dynamic = metrics.MetaField('strict')  # TODO-quest: is this inherited?
         # source = metrics.MetaField(enabled=True)
-
-    @property
-    def report_class(self):
-        raise NotImplementedError(f'{self.__class__.__name__} should implement report_class')
