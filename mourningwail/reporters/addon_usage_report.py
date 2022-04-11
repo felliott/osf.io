@@ -6,7 +6,7 @@ from django.conf import settings
 
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
-from ._base import DailyReport
+from ._base import DailyReporter
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -62,8 +62,8 @@ def get_enabled_authorized_linked(user_settings_list, has_external_account, shor
     }
 
 
-class AddonUsageReport(DailyReport):
-    def run_daily_report(self):
+class AddonUsageReport(DailyReporter):
+    def report(self):
         counts = []
         addons_available = {
             addon.short_name: addon

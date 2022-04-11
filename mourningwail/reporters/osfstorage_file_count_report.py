@@ -3,17 +3,16 @@ from django.db.models import Q
 import logging
 
 from osf.models import AbstractNode, Preprint
-from mourningwail.metrics.base import DailyReport
+from mourningwail.metrics.base import DailyReporter
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-class OsfstorageFileCountReport(DailyReport):
+class OsfstorageFileCountReport(DailyReporter):
 
-    @classmethod
-    def run_daily_report(cls, day_start, day_end):
+    def report(cls, date):
         from addons.osfstorage.models import OsfStorageFile
 
         file_qs = OsfStorageFile.objects
@@ -30,15 +29,12 @@ class OsfstorageFileCountReport(DailyReport):
             target_content_type__in=[abstract_node_content_type, preprint_content_type],
         )
 
-        daily_query = Q(
-            created__gte=day_start,
-            created__lt=day_end,
-        )
+        daily_query = Q(created__date=date)
 
         totals = {
-            'keen': {
-                'timestamp': day_start.isoformat()
-            },
+            # 'keen': {
+            #     'timestamp': day_start.isoformat()
+            # },
             # OsfStorageFiles - the number of files on OsfStorage
             'osfstorage_files_including_quickfiles': {
                 'total': file_qs.count(),
@@ -57,3 +53,6 @@ class OsfstorageFileCountReport(DailyReport):
         )
 
         return [totals]
+
+    # TODO-quest
+    # def get_keen_events(self, report_result, keen_event_timestamp):

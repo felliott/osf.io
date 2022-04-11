@@ -6,49 +6,35 @@ explore and encode the MOURNING WAIL of our usage of keen!
 https://en.wiktionary.org/wiki/keen#Noun
 )
 
-sometimes we gather metric data as a series of REPORTS
-    total users, projects, registrations, files...
-    data categorized/summarized/aggregated over a timespan
 
-sometimes we gather metric data as a stream of EVENTS
-    page-views, clicks, requests...
-    data available for REPORTS
+sometimes we gather data as a STREAM of events
+    like noticing plants you pass as you walk through a forest
+    hearing birds call and sing in the distance
+for each event:
+    WRITE your immediate reaction
+               reflexive thought
+    stay attentive to the flow of the moment
 
-EVENTS are recorded as they happen
-                    in response to somebeing's action
-                    with minimal computation
-REPORTS are generated periodically
-                      as needed
-                      in the background
 
+sometimes we REFLECT through the lens of our mind and memory
+    considering records written by ourselves and others
+    noticing patterns in retrospect
+    synthesizing understanding
+when your understanding comes into focus:
+    create (or decide on) some expression of your understanding
+    WRITE information about that expression (metadata)
+
+
+-----
 
 
 new code regions:
     mourningwail (new django app)
-    mourningwail.metrics (`elasticsearch_metrics.metrics.Metric` subclasses for events and reports)
+    mourningwail.metrics (`elasticsearch_metrics.metrics.Metric` subclasses for events)
+    mourningwail.reporter
 
 
 
 new api surface:
     /_/metrics/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)
     /_/page_visit/ (POST new page-visit events)
-
-
-
------
-
-stirrin up names...
-
-    the basic types of datum for this metrics/analytics store are a handful of RECORD types:
-
-        a tool may leave a RECORD of how it has been used
-            => `UsageRecord`
-            => "at [this] time, [i] was used in [this] way"
-
-        a reporter (be they person or program) may publish a RECORD of what they have observed and synthesized
-            => `SynthesisRecord`
-            => "at [this] time, based on various observations, [i] believe [this] to be true"
-
-        a member of a community may post a RECORD of their objection, indifference, or agreement
-            => `ConsensusRecord`
-            => "at [this] time, [i] respond to [this] with [objection/agreement/indifference]"

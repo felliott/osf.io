@@ -14,8 +14,8 @@ class MeteredEvent(metrics.Metric):
         # source = metrics.MetaField(enabled=True)
 
 
-class MeteredReport(metrics.Metric):
-    """MeteredReport (abstract base for the report-based metrics in mourningwail.reports)
+class MeteredReportResult(metrics.Metric):
+    """MeteredReportResult (abstract base for the report-based metrics in mourningwail.report_results)
 
     There's something we'd like to know about every so often,
     so let's regularly run a report and stash the results here
