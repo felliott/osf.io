@@ -5,19 +5,14 @@ from django.db.models import Q
 
 from osf.models import OSFUser
 from framework.database import paginated
-from ._base import DailyReport
+from ._base import DailyReporter
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-class NewUserDomainReport(DailyReport):
-    def run_daily_report(self):
-
-    def backfill_report(self, date):
-        
-
-    def _run_report(self, date):
+class NewUserDomainReporter(DailyReporter):
+    def report(self, date):
         user_query = (Q(date_confirmed__date=date) &
                       Q(username__isnull=False))
         users = paginated(OSFUser, query=user_query)
@@ -33,3 +28,6 @@ class NewUserDomainReport(DailyReport):
 
         logger.info('User domains collected. {} users and their email domains.'.format(len(user_domain_events)))
         return user_domain_events
+
+    # TODO-quest
+    # def get_keen_events(self, report_result, keen_event_timestamp):

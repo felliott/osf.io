@@ -1,11 +1,11 @@
-from __future__ import absolute_import
-
+from datetime import timedelta
 import logging
 
-from django.conf import settings
+from django.conf import settings, timezone
 
 from osf.models import OSFUser, AbstractNode
 from framework.database import paginated
+from mourningwail.metrics.reports import AddonUsageReport
 from ._base import DailyReporter
 
 logger = logging.getLogger(__name__)
@@ -62,8 +62,12 @@ def get_enabled_authorized_linked(user_settings_list, has_external_account, shor
     }
 
 
-class AddonUsageReport(DailyReporter):
-    def report(self):
+class AddonUsageReporter(DailyReporter):
+    def report(self, date):
+        yesterday = timezone.now().date() - timedelta(days=1)
+        if date != yesterday:
+            raise NotImplementedError
+
         counts = []
         addons_available = {
             addon.short_name: addon
@@ -93,18 +97,18 @@ class AddonUsageReport(DailyReporter):
             total = connected_count + deleted_count + disconnected_count
             usage_counts = get_enabled_authorized_linked(addon.models.get('usersettings'), has_external_account, addon.short_name)
 
-            counts.append({
-                'provider': {
-                    'name': short_name
-                },
-                'users': usage_counts,
-                'nodes': {
-                    'total': total,
-                    'connected': connected_count,
-                    'deleted': deleted_count,
-                    'disconnected': disconnected_count
-                }
-            })
+            counts.append(
+                AddonUsageReport(
+                    addon_shortname=short_name,
+                    users_enabled_count=usage_counts['enabled'],
+                    users_authorized_count=usage_counts['authorized'],
+                    users_linked_count=usage_counts['linked'],
+                    nodes_total_count=total,
+                    nodes_connected_count=connected_count,
+                    nodes_deleted_count=deleted_count,
+                    nodes_disconnected_count=disconnected_count,
+                )
+            )
 
             logger.info(
                 '{} counted. Users with a linked node: {}, Total connected nodes: {}.'.format(
@@ -114,3 +118,24 @@ class AddonUsageReport(DailyReporter):
                 )
             )
         return counts
+
+    def get_keen_events(self, reports, keen_event_timestamp):
+        return [
+            {
+                'provider': {
+                    'name': report.addon_shortname,
+                },
+                'users': {
+                    'enabled': report.users_enabled_count,
+                    'authorized': report.users_authorized_count,
+                    'linked': report.users_linked_count,
+                },
+                'nodes': {
+                    'total': report.nodes_total_count,
+                    'connected': report.nodes_connected_count,
+                    'deleted': report.nodes_deleted_count,
+                    'disconnected': report.nodes_disconnected_count
+                }
+            }
+            for report in reports
+        ]

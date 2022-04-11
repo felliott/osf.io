@@ -7,6 +7,11 @@ https://en.wiktionary.org/wiki/keen#Noun
 )
 
 
+-----
+
+zoomed-out ruminations:
+
+
 sometimes we gather data as a STREAM of events
     like noticing plants you pass as you walk through a forest
     hearing birds call and sing in the distance
@@ -27,11 +32,19 @@ when your understanding comes into focus:
 
 -----
 
+zoomed-in plans
+
 
 new code regions:
-    mourningwail (new django app)
-    mourningwail.metrics (`elasticsearch_metrics.metrics.Metric` subclasses for events)
-    mourningwail.reporter
+    mourningwail:
+        new django app for metrics/analytics
+    mourningwail.metrics.events:
+        models for storing event-stream data in elasticsearch
+    mourningwail.metrics.reports:
+        models for storing report data in elasticsearch
+    mourningwail.reporters: 
+        given a date, a reporter generates data about what happened on that date
+        `reporter.report(date)` returns iterable of `mourningwail.metrics._base.MeteredReport` instances
 
 
 

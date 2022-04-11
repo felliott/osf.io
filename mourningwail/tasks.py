@@ -4,7 +4,7 @@ import logging
 from django.utils import timezone
 
 from framework.celery_tasks import app as celery_app
-from mourningwail.reports import DAILY_REPORTS
+from mourningwail.reporters import DAILY_REPORTERS
 from scripts.utils import add_file_logger
 
 
@@ -18,8 +18,8 @@ def run_daily_reports():
     # run all reports for the same yesterday
     yesterday = (timezone.now() - timedelta(days=1)).date()
 
-    for report_class in DAILY_REPORTS:
-        report_class.run_and_record_for_yesterday(
+    for reporter_class in DAILY_REPORTERS:
+        reporter_class.run_and_record_for_yesterday(
             verify_yesterday=yesterday,
             also_send_to_keen=True,
         )

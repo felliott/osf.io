@@ -3,16 +3,16 @@ from django.db.models import Q
 import logging
 
 from osf.models import AbstractNode, Preprint
-from mourningwail.metrics.base import DailyReporter
+from ._base import DailyReporter
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-class OsfstorageFileCountReport(DailyReporter):
+class OsfstorageFileCountReporter(DailyReporter):
 
-    def report(cls, date):
+    def report(self, date):
         from addons.osfstorage.models import OsfStorageFile
 
         file_qs = OsfStorageFile.objects

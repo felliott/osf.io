@@ -1,40 +1,36 @@
 from django.db.models import Q
 import logging
 
-from ._base import DailyReport
+from ._base import DailyReporter
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-class NodeCountReport(DailyReport):
+class NodeCountReporter(DailyReporter):
 
-    @classmethod
-    def run_daily_report(cls, day_start, day_end):
+    def report(self, date):
         from osf.models import Node, Registration
         from osf.models.spam import SpamStatus
 
-        node_qs = Node.objects.filter(is_deleted=False, created__lte=day_end)
-        registration_qs = Registration.objects.filter(is_deleted=False, created__lte=day_end)
+        node_qs = Node.objects.filter(is_deleted=False, created__date__lte=date)
+        registration_qs = Registration.objects.filter(is_deleted=False, created__date__lte=date)
 
         public_query = Q(is_public=True)
         private_query = Q(is_public=False)
 
         # node_query encompasses lte query_datetime
-        daily_query = Q(created__gte=day_start)
+        daily_query = Q(created__date=date)
         retracted_query = Q(retraction__isnull=False)
 
         # `embargoed` used private status to determine embargoes, but old registrations could be private and unapproved registrations can also be private
         # `embargoed_v2` uses future embargo end dates on root
-        embargo_v2_query = Q(root__embargo__end_date__gt=day_end)
+        embargo_v2_query = Q(root__embargo__end_date__date__gt=date)
 
         exclude_spam = ~Q(spam_status__in=[SpamStatus.SPAM, SpamStatus.FLAGGED])
 
         totals = {
-            'keen': {
-                'timestamp': day_start.isoformat()
-            },
             # Nodes - the number of projects and components
             'nodes': {
                 'total': node_qs.count(),
@@ -97,3 +93,6 @@ class NodeCountReport(DailyReport):
 
         logger.info(totals)
         return [totals]
+
+    # TODO-quest
+    # def get_keen_events(self, report_result, keen_event_timestamp):

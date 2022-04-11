@@ -4,7 +4,7 @@ from .events import (
     SystemLogEvent,
     UiInteractionEvent,
 )
-from .report_results import (
+from .reports import (
     AddonUsageReport,
     DownloadCountReport,
     InstitutionSummaryReport,
@@ -22,7 +22,7 @@ METERED_EVENTS = (
     SystemLogEvent,
     UiInteractionEvent,
 )
-DAILY_REPORTS = (
+METERED_REPORTS = (
     AddonUsageReport,
     DownloadCountReport,
     InstitutionSummaryReport,
@@ -34,4 +34,4 @@ DAILY_REPORTS = (
 )
 
 
-__all__ = ('DAILY_REPORTS', 'METERED_EVENTS')
+__all__ = ('METERED_REPORTS', 'METERED_EVENTS')
