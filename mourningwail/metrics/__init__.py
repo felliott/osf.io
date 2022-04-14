@@ -6,13 +6,13 @@ from .events import (
 )
 from .reports import (
     AddonUsageReport,
-    DownloadCountReport,
+    DailyDownloadCountReport,
     InstitutionSummaryReport,
-    NewUserDomainReport,
-    NodeCountReport,
-    OsfstorageFileCountReport,
+    # NewUserDomainReport,
+    # NodeCountReport,
+    # OsfstorageFileCountReport,
     PreprintCountReport,
-    UserCountReport,
+    # UserCountReport,
 )
 
 
@@ -24,13 +24,13 @@ METERED_EVENTS = (
 )
 METERED_REPORTS = (
     AddonUsageReport,
-    DownloadCountReport,
+    DailyDownloadCountReport,
     InstitutionSummaryReport,
-    NewUserDomainReport,
-    NodeCountReport,
-    OsfstorageFileCountReport,
+    # NewUserDomainReport,
+    # NodeCountReport,
+    # OsfstorageFileCountReport,
     PreprintCountReport,
-    UserCountReport,
+    # UserCountReport,
 )
 
 

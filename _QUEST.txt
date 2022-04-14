@@ -47,6 +47,11 @@ new code regions:
         `reporter.report(date)` returns iterable of `mourningwail.metrics._base.MeteredReport` instances
 
 
+constrained query endpoint:
+    SUM of integer field over bucketed time interval
+    COUNT on keyword field within given time interval
+    decouple api field names from elasticsearch field names
+
 
 new api surface:
     /_/metrics/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)

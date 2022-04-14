@@ -18,3 +18,12 @@ class AddonUsageReport(MeteredReport):
     nodes_deleted_count = metrics.Integer()
     nodes_disconnected_count = metrics.Integer()
 
+
+class DailyDownloadCountReport(MeteredReport):
+    report_date = metrics.Date()
+    total_file_downloads = metrics.Integer()
+
+
+class InstitutionSummaryReport(MeteredReport):
+    total_users = metrics.Integer()
+    new_users_today = metrics.Integer()
