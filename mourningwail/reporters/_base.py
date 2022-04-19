@@ -3,20 +3,7 @@ import pytz
 
 from django.utils import timezone
 
-from mourningwail.metrics.base import MeteredReportResult
 from mourningwail.exceptions import WrongYesterday
-
-
-class SnapshotReport:
-    # TODO-quest: RESULT_METRIC =
-
-    def run_and_record(self, *, also_send_to_keen=False):
-        pass  # TODO-quest
-
-    def get_keen_events(self, snapshot, keen_event_timestamp):
-        # for back-compat; to be deleted once we don't need keen anymore
-        # TODO-quest: implement in subclasses
-        raise NotImplementedError(f'{self.__name__} should probably implement get_keen_events')
 
 
 class DailyReporter:

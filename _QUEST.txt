@@ -44,15 +44,25 @@ new code regions:
         models for storing report data in elasticsearch
     mourningwail.reporters: 
         given a date, a reporter generates data about what happened on that date
-        `reporter.report(date)` returns iterable of `mourningwail.metrics._base.MeteredReport` instances
+        `reporter.report(date)` returns iterable of `mourningwail.metrics._base.DailyMeteredReport` instances
 
-
-constrained query endpoint:
-    SUM of integer field over bucketed time interval
-    COUNT on keyword field within given time interval
-    decouple api field names from elasticsearch field names
 
 
 new api surface:
-    /_/metrics/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)
-    /_/page_visit/ (POST new page-visit events)
+    /_/mw/report/<report_name>/latest/
+    /_/mw/report/<report_name>/recent/?days_back=7
+    /_/mw/event/page_visit/ (POST new page-visit events)
+    /_/mw/query/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)
+
+
+sometimes, the data we want is already in a daily report,
+so let's allow getting reports within a date range
+
+
+well-constrained query endpoint:
+    start simple:
+        COUNT
+        SUM (for integer fields on reports)
+    require a timespan
+    allow bucketing by time interval
+    decouple api field names from elasticsearch field names

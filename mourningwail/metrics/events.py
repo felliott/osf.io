@@ -11,6 +11,7 @@ class FileDownloadEvent(MeteredEvent):
 class PageVisitEvent(MeteredEvent):
     referer_domain = metrics.Keyword()
     hour_of_day = metrics.Integer()
+    session_id = metrics.Keyword()
 
     # TODO-quest i don't think copy_to works this way
     page_title = metrics.Keyword(copy_to='path_n_title')

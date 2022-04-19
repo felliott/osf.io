@@ -21,5 +21,5 @@ def run_daily_reports():
     for reporter_class in DAILY_REPORTERS:
         reporter_class.run_and_record_for_yesterday(
             verify_yesterday=yesterday,
-            also_send_to_keen=True,
+            # also_send_to_keen=True,
         )

@@ -1,14 +1,14 @@
 from elasticsearch_metrics import metrics
 
-from ._base import MeteredReport
+from ._base import DailyMeteredReport
 
 
-class PreprintCountReport(MeteredReport):
+class PreprintCountReport(DailyMeteredReport):
     provider_name = metrics.Keyword()
     preprint_count = metrics.Integer()
 
 
-class AddonUsageReport(MeteredReport):
+class AddonUsageReport(DailyMeteredReport):
     addon_shortname = metrics.Keyword()
     users_enabled_count = metrics.Integer()
     users_authorized_count = metrics.Integer()
@@ -19,11 +19,11 @@ class AddonUsageReport(MeteredReport):
     nodes_disconnected_count = metrics.Integer()
 
 
-class DailyDownloadCountReport(MeteredReport):
+class DailyDownloadCountReport(DailyMeteredReport):
     report_date = metrics.Date()
     total_file_downloads = metrics.Integer()
 
 
-class InstitutionSummaryReport(MeteredReport):
+class InstitutionSummaryReport(DailyMeteredReport):
     total_users = metrics.Integer()
     new_users_today = metrics.Integer()

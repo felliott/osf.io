@@ -14,14 +14,14 @@ class MeteredEvent(metrics.Metric):
         # source = metrics.MetaField(enabled=True)
 
 
-class MeteredReport(metrics.Metric):
-    """MeteredReport (abstract base for the report-based metrics in mourningwail.reports)
+class DailyMeteredReport(metrics.Metric):
+    """DailyMeteredReport (abstract base for the report-based metrics in mourningwail.reports)
 
     There's something we'd like to know about every so often,
     so let's regularly run a report and stash the results here
     (then come back later to query/analyze/investigate)
     """
-    run_duration_milliseconds = metrics.Integer()
+    date_reported_on = metrics.Date()
 
     class Meta:
         abstract = True
