@@ -20,7 +20,6 @@ class AddonUsageReport(DailyMeteredReport):
 
 
 class DailyDownloadCountReport(DailyMeteredReport):
-    report_date = metrics.Date()
     total_file_downloads = metrics.Integer()
 
 

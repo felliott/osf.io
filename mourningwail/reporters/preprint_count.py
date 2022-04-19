@@ -49,6 +49,7 @@ class PreprintCountReporter(DailyReporter):
             resp = requests.post('https://share.osf.io/api/v2/search/creativeworks/_search', json=elastic_query).json()
             counts.append(
                 PreprintCountReport(
+                    date_reported_on=date,
                     provider_name=preprint_provider.name,
                     preprint_count=resp['hits']['total'],
                 )

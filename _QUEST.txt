@@ -66,3 +66,13 @@ well-constrained query endpoint:
     require a timespan
     allow bucketing by time interval
     decouple api field names from elasticsearch field names
+
+
+-----
+
+to see something locally, run this:
+```
+python3 manage.py sync_metrics
+python3 manage.py run_daily_reports
+```
+then check localhost:9201/mourningwail_*/_search

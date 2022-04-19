@@ -72,8 +72,8 @@ def serialize_report(report):
 
 
 @require_GET
-@permission_required('osf.view_metrics')
-def get_recent_reports(self, request, report_name):
+#@permission_required('osf.view_metrics')
+def get_recent_reports(request, report_name):
     try:
         report_class = VIEWABLE_REPORTS[report_name]
     except KeyError:
@@ -90,13 +90,13 @@ def get_recent_reports(self, request, report_name):
 
     search_response = search_recent.execute()
     return JsonResponse(
-        [serialize_report(hit) for hit in search_response]
+        {'reports': [serialize_report(hit) for hit in search_response]}
     )
 
 
 @require_GET
-@permission_required('osf.view_metrics')
-def get_latest_report(self, request, report_name):
+#@permission_required('osf.view_metrics')
+def get_latest_report(request, report_name):
     try:
         report_class = VIEWABLE_REPORTS[report_name]
     except KeyError:

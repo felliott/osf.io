@@ -19,7 +19,7 @@ def run_daily_reports():
     yesterday = (timezone.now() - timedelta(days=1)).date()
 
     for reporter_class in DAILY_REPORTERS:
-        reporter_class.run_and_record_for_yesterday(
+        reporter_class().run_and_record_for_yesterday(
             verify_yesterday=yesterday,
             # also_send_to_keen=True,
         )
