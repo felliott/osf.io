@@ -84,8 +84,8 @@ def get_recent_reports(request, report_name):
 
     search_recent = (
         report_class.search()
-        .filter('range', date_reported_on={'gte': f'now/d-{days_back}d'})
-        .sort('-date_reported_on')
+        .filter('range', report_date={'gte': f'now/d-{days_back}d'})
+        .sort('-report_date')
     )
 
     search_response = search_recent.execute()
@@ -104,7 +104,7 @@ def get_latest_report(request, report_name):
 
     latest_search = (
         report_class.search()
-        .sort('-date_reported_on')
+        .sort('-report_date')
         [0]
     )
 

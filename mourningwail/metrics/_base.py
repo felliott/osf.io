@@ -21,7 +21,7 @@ class DailyMeteredReport(metrics.Metric):
     so let's regularly run a report and stash the results here
     (then come back later to query/analyze/investigate)
     """
-    date_reported_on = metrics.Date()
+    report_date = metrics.Date(format='strict_date')
 
     class Meta:
         abstract = True
