@@ -16,7 +16,7 @@ var client;
 //     readKey: keenReadKey
 // });
 
-var publicClient;
+// var publicClient;
 // var publicClient = new keenAnalysis({
 //     projectId: keenPublicProjectId,
 //     readKey: keenPublicReadKey
@@ -285,7 +285,7 @@ var getWeeklyUserGain = function() {
 };
 
 // KRA-NOTE: keenQuery passed in, client, metrics
-var renderKeenMetric = function(element, type, query, height, colors, keenClient) {
+var renderKeenMetric = function(element, type, query, height, colors) {
 
     var chart = new keenDataviz()
         .el(element)
@@ -1068,40 +1068,40 @@ var PreprintMetrics = function() {
 
 var DownloadMetrics = function() {
 
-    var totalDownloadsQuery = new keenAnalysis.Query("count", {
-        eventCollection: "file_stats",
-        timeframe: 'previous_1_days',
-        filters: [{
-            property_name: 'action.type',
-            operator: 'eq',
-            property_value: 'download_file',
-            timezone: "UTC"
-        }]
-    });
-    renderKeenMetric("#number-of-downloads", "metric", totalDownloadsQuery, defaultHeight, defaultColor, publicClient);
+    // var totalDownloadsQuery = new keenAnalysis.Query("count", {
+    //     eventCollection: "file_stats",
+    //     timeframe: 'previous_1_days',
+    //     filters: [{
+    //         property_name: 'action.type',
+    //         operator: 'eq',
+    //         property_value: 'download_file',
+    //         timezone: "UTC"
+    //     }]
+    // });
+    // renderKeenMetric("#number-of-downloads", "metric", totalDownloadsQuery, defaultHeight, defaultColor, publicClient);
 
-    var uniqueDownloadsQuery = new keenAnalysis.Query("count_unique", {
-        eventCollection: "file_stats",
-        timeframe: 'previous_1_days',
-        target_property: 'file.resource',
-        filters: [{
-            property_name: 'action.type',
-            operator: 'eq',
-            property_value: 'download_file',
-            timezone: "UTC"
-        }]
-    });
-    renderKeenMetric("#number-of-unique-downloads", "metric", uniqueDownloadsQuery, defaultHeight, defaultColor, publicClient);
+    // var uniqueDownloadsQuery = new keenAnalysis.Query("count_unique", {
+    //     eventCollection: "file_stats",
+    //     timeframe: 'previous_1_days',
+    //     target_property: 'file.resource',
+    //     filters: [{
+    //         property_name: 'action.type',
+    //         operator: 'eq',
+    //         property_value: 'download_file',
+    //         timezone: "UTC"
+    //     }]
+    // });
+    // renderKeenMetric("#number-of-unique-downloads", "metric", uniqueDownloadsQuery, defaultHeight, defaultColor, publicClient);
 
-    var downloadCount = new keenAnalysis.Query("sum", {
-        eventCollection: "download_count_summary",
-        interval: "daily",
-        targetProperty: "files.total",
-        timeframe: "previous_30_days",
-        timezone: "UTC"
-    });
+    // var downloadCount = new keenAnalysis.Query("sum", {
+    //     eventCollection: "download_count_summary",
+    //     interval: "daily",
+    //     targetProperty: "files.total",
+    //     timeframe: "previous_30_days",
+    //     timezone: "UTC"
+    // });
 
-    renderKeenMetric("#download-counts", "line", downloadCount, defaultHeight);
+    // renderKeenMetric("#download-counts", "line", downloadCount, defaultHeight);
 };
 
 
