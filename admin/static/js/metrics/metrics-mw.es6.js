@@ -303,7 +303,7 @@ var renderKeenMetric = function(element, type, query, height, colors, keenClient
 
     $.ajax({
         url: metricsUrl,
-        type: "post",
+        type: "get",
         data: newQuery,
     }).done(function (res) {
         var metricChart = chart.data(res);
