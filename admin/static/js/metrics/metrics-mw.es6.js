@@ -298,6 +298,7 @@ var renderKeenMetric = function(element, type, query, height, colors) {
         chart.colors([colors]);
     }
 
+    // KRA - keenClient call.run - CONVERTED
     var newQuery = query.params;
     newQuery['analysis_type'] = query.analysis;
 
@@ -318,9 +319,6 @@ var renderKeenMetric = function(element, type, query, height, colors) {
 
 // KRA-NOTE: keenQuery, makes chart, runs client
 var renderNodeLogsForOneUserChart = function(user_id) {
-    console.log('!!! bailing out of renderNodeLogsForOneUserChart');
-    return;
-
     var chart = new keenDataviz()
         .el('#yesterdays-node-logs-by-user')
         .height(bigMetricHeight)
@@ -328,28 +326,30 @@ var renderNodeLogsForOneUserChart = function(user_id) {
         .type('line')
         .prepare();
 
-    // KRA - keenClient call.run
-    client
-        .query('count', {
-            event_collection: "node_log_events",
-            interval: "hourly",
-            group_by: "action",
-            filters: [{
-                property_name: 'user_id',
-                operator: 'eq',
-                property_value: user_id
-            }],
-            timeframe: "previous_1_days",
-            timezone: "UTC"
-        })
-        .then(function(res){
-            chart
-                .data(res)
-                .render();
-        })
-        .catch(function(err){
-            chart.message(err.message);
-        });
+    // KRA - keenClient call.run - CONVERTED
+    var newQuery = {
+        event_collection: "node_log_events",
+        interval: "hourly",
+        group_by: "action",
+        filters: [{
+            property_name: 'user_id',
+            operator: 'eq',
+            property_value: user_id
+        }],
+        timeframe: "previous_1_days",
+        timezone: "UTC"
+    }
+    newQuery['analysis_type'] = 'count';
+
+    $.ajax({
+        url: metricsUrl,
+        type: "get",
+        data: newQuery,
+    }).done(function (res) {
+        chart.data(res).render();
+    }).fail(function(jqXHR, textStatus, err){
+        chart.message(err.message);
+    });
 };
 
 
@@ -643,39 +643,37 @@ var email_domains = new keenAnalysis.Query("count", {
 });
 
 var renderEmailDomainsChart = function() {
-    console.log('!!! bailing out of renderEmailDomainsChart');
-    return;
-
     var chart = new keenDataviz()
         .el('#user-registration-by-email-domain')
         .title(' ')
         .type('line')
         .prepare();
 
-    // KRA - keenClient call.run
-    client.run(email_domains)
-        .then(function (res) {
-            var chartWithData = chart.data(res);
-            chartWithData.dataset.filterColumns(function (column, index) {
-                var emailThreshhold = 1;
-                for (var i = 0; i < column.length; i++) {
-                    if (column[i] > emailThreshhold) {
-                        return column;
-                    }
+    // KRA - keenClient call.run - CONVERTED
+    var newQuery = email_domains.params;
+    newQuery['analysis_type'] = email_domains.analysis;
+    $.ajax({
+        url: metricsUrl,
+        type: "get",
+        data: newQuery,
+    }).done(function (res) {
+        var chartWithData = chart.data(res);
+        chartWithData.dataset.filterColumns(function (column, index) {
+            var emailThreshhold = 1;
+            for (var i = 0; i < column.length; i++) {
+                if (column[i] > emailThreshhold) {
+                    return column;
                 }
-            });
-
-            chartWithData.render();
-        })
-        .catch(function (err) {
-            chart.message(err.message);
+            }
         });
+
+        chartWithData.render();
+    }).fail(function (jqXHR, textStatus, err) {
+        chart.message(err.message);
+    });
 };
 
 var NodeLogsPerUser = function() {
-    console.log('!!! bailing out of NodeLogsPerUser');
-    return;
-
     var chart = new keenDataviz()
         .el('#yesterdays-node-logs-by-user')
         .title(' ')
@@ -691,30 +689,34 @@ var NodeLogsPerUser = function() {
         .type('line')
         .prepare();
 
-    // KRA - keenClient call.run
-    client
-        .query('count', {
-            event_collection: 'node_log_events',
-            group_by: "user_id",
-            timeframe: 'previous_1_days',
-            interval: 'hourly'
-        })
-        .then(function (res) {
-            var chartWithData = chart.data(res);
-            chartWithData.dataset.filterColumns(function (column, index) {
-                var logThreshhold = 25;
-                for (var i = 0; i < column.length; i++) {
-                    if (column[i] > logThreshhold && column[0] != 'null' && column[0] != 'uj57r') {
-                        return column;
-                    }
-                }
-            });
+    // KRA - keenClient call.run - CONVERTED
+    var newQuery = {
+        event_collection: 'node_log_events',
+        group_by: "user_id",
+        timeframe: 'previous_1_days',
+        interval: 'hourly'
+    }
+    newQuery['analysis_type'] = 'count';
 
-            chartWithData.render();
-        })
-        .catch(function (err) {
-            chart.message(err.message);
+    $.ajax({
+        url: metricsUrl,
+        type: "get",
+        data: newQuery,
+    }).done(function (res) {
+        var chartWithData = chart.data(res);
+        chartWithData.dataset.filterColumns(function (column, index) {
+            var logThreshhold = 25;
+            for (var i = 0; i < column.length; i++) {
+                if (column[i] > logThreshhold && column[0] != 'null' && column[0] != 'uj57r') {
+                    return column;
+                }
+            }
         });
+
+        chartWithData.render();
+    }).fail(function (jqXHR, textStatus, err) {
+        chart.message(err.message);
+    });
 };
 
 
