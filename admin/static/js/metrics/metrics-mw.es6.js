@@ -454,46 +454,46 @@ var renderMainCounts = function() {
     renderKeenMetric("#active-user-count", "metric", activeUsersQuery, bigMetricHeight);
 
     // Daily Gain
-    var yesterday_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.active",
-        timeframe: getOneDayTimeframe(1, null)
-    });
+    // var yesterday_user_count = new keenAnalysis.Query("sum", {
+    //     eventCollection: "user_summary",
+    //     targetProperty: "status.active",
+    //     timeframe: getOneDayTimeframe(1, null)
+    // });
 
-    var two_days_ago_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.active",
-        timeframe: getOneDayTimeframe(2, null)
-    });
-    renderCalculationBetweenTwoQueries(yesterday_user_count, two_days_ago_user_count, "#daily-user-increase", 'day', 'subtraction');
+    // var two_days_ago_user_count = new keenAnalysis.Query("sum", {
+    //     eventCollection: "user_summary",
+    //     targetProperty: "status.active",
+    //     timeframe: getOneDayTimeframe(2, null)
+    // });
+    // renderCalculationBetweenTwoQueries(yesterday_user_count, two_days_ago_user_count, "#daily-user-increase", 'day', 'subtraction');
 
     // Monthly Gain
-    var last_month_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.active",
-        timeframe: getOneDayTimeframe(null, 1)
-    });
+    // var last_month_user_count = new keenAnalysis.Query("sum", {
+    //     eventCollection: "user_summary",
+    //     targetProperty: "status.active",
+    //     timeframe: getOneDayTimeframe(null, 1)
+    // });
 
-    var two_months_ago_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.active",
-        timeframe: getOneDayTimeframe(null, 2)
-    });
-    renderCalculationBetweenTwoQueries(last_month_user_count, two_months_ago_user_count, "#monthly-user-increase", 'month', 'subtraction', monthColor);
+    // var two_months_ago_user_count = new keenAnalysis.Query("sum", {
+    //     eventCollection: "user_summary",
+    //     targetProperty: "status.active",
+    //     timeframe: getOneDayTimeframe(null, 2)
+    // });
+    // renderCalculationBetweenTwoQueries(last_month_user_count, two_months_ago_user_count, "#monthly-user-increase", 'month', 'subtraction', monthColor);
 
-    var week_ago_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.unconfirmed",
-        timeframe: getOneDayTimeframe(7, null)
-    });
+    // var week_ago_user_count = new keenAnalysis.Query("sum", {
+    //     eventCollection: "user_summary",
+    //     targetProperty: "status.unconfirmed",
+    //     timeframe: getOneDayTimeframe(7, null)
+    // });
 
-    // New Unconfirmed Users - # of unconfirmed users in the past 7 days
-    var yesterday_unconfirmed_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.unconfirmed",
-        timeframe: getOneDayTimeframe(1, null)
-    });
-    renderCalculationBetweenTwoQueries(yesterday_unconfirmed_user_count, week_ago_user_count, "#unverified-new-users", 'week', 'subtraction');
+    // // New Unconfirmed Users - # of unconfirmed users in the past 7 days
+    // var yesterday_unconfirmed_user_count = new keenAnalysis.Query("sum", {
+    //     eventCollection: "user_summary",
+    //     targetProperty: "status.unconfirmed",
+    //     timeframe: getOneDayTimeframe(1, null)
+    // });
+    // renderCalculationBetweenTwoQueries(yesterday_unconfirmed_user_count, week_ago_user_count, "#unverified-new-users", 'week', 'subtraction');
 
 };
 
@@ -761,7 +761,7 @@ var InstitutionMetrics = function() {
     renderKeenMetric("#total-institutional-users", "metric", institutional_user_count, defaultHeight);
 
     // Total Instutional Users / Total OSF Users
-    renderCalculationBetweenTwoQueries(institutional_user_count, activeUsersQuery, "#percentage-institutional-users", null, 'percentage');
+    // renderCalculationBetweenTwoQueries(institutional_user_count, activeUsersQuery, "#percentage-institutional-users", null, 'percentage');
 
     // Nodes!
 
@@ -881,24 +881,24 @@ var ActiveUserMetrics = function() {
     renderKeenMetric("#daily-active-users", "metric", dailyActiveUsersQuery, defaultHeight);
 
     // Daily Active Users / Total Users
-    renderCalculationBetweenTwoQueries(dailyActiveUsersQuery, activeUsersQuery, "#daily-active-over-total-users", null, "percentage");
+    // renderCalculationBetweenTwoQueries(dailyActiveUsersQuery, activeUsersQuery, "#daily-active-over-total-users", null, "percentage");
 
 
     renderKeenMetric("#monthly-active-users", "metric", monthlyActiveUsersQuery, defaultHeight, monthColor);
 
 
     // Monthly Active Users / Total Users
-    renderCalculationBetweenTwoQueries(monthlyActiveUsersQuery, activeUsersQuery, "#monthly-active-over-total-users", null, 'percentage', monthColor);
+    // renderCalculationBetweenTwoQueries(monthlyActiveUsersQuery, activeUsersQuery, "#monthly-active-over-total-users", null, 'percentage', monthColor);
 
 
     // Monthly Growth of MAU% -- Two months ago vs 1 month ago
-    var twoMonthsAgoActiveUsersQuery = new keenAnalysis.Query("count_unique", {
-        eventCollection: "pageviews",
-        targetProperty: "user.id",
-        timeframe: "previous_2_months",
-        timezone: "UTC"
-    });
-    differenceGrowthBetweenMetrics(twoMonthsAgoActiveUsersQuery, monthlyActiveUsersQuery, activeUsersQuery, "#monthly-active-user-increase", monthColor);
+    // var twoMonthsAgoActiveUsersQuery = new keenAnalysis.Query("count_unique", {
+    //     eventCollection: "pageviews",
+    //     targetProperty: "user.id",
+    //     timeframe: "previous_2_months",
+    //     timezone: "UTC"
+    // });
+    // differenceGrowthBetweenMetrics(twoMonthsAgoActiveUsersQuery, monthlyActiveUsersQuery, activeUsersQuery, "#monthly-active-user-increase", monthColor);
 
     // Yearly Active Users
     var yearlyActiveUsersQuery = new keenAnalysis.Query("count_unique", {
@@ -909,14 +909,14 @@ var ActiveUserMetrics = function() {
     });
     renderKeenMetric("#yearly-active-users", "metric", yearlyActiveUsersQuery, defaultHeight, yearColor);
 
-    // Yearly Active Users / Total Users
-    renderCalculationBetweenTwoQueries(yearlyActiveUsersQuery, activeUsersQuery, "#yearly-active-over-total-users", null, 'percentage', yearColor);
+    // // Yearly Active Users / Total Users
+    // renderCalculationBetweenTwoQueries(yearlyActiveUsersQuery, activeUsersQuery, "#yearly-active-over-total-users", null, 'percentage', yearColor);
 
-    // Average Projects per User
-    renderCalculationBetweenTwoQueries(totalProjectsQuery, activeUsersQuery, "#projects-per-user", null, 'division');
+    // // Average Projects per User
+    // renderCalculationBetweenTwoQueries(totalProjectsQuery, activeUsersQuery, "#projects-per-user", null, 'division');
 
-    // Average Projects per MAU
-    renderCalculationBetweenTwoQueries(totalProjectsQuery, monthlyActiveUsersQuery, "#projects-per-monthly-user", null, 'division');
+    // // Average Projects per MAU
+    // renderCalculationBetweenTwoQueries(totalProjectsQuery, monthlyActiveUsersQuery, "#projects-per-monthly-user", null, 'division');
 };
 
 // <+><+><+><+><+><+><+<+>+
@@ -925,14 +925,14 @@ var ActiveUserMetrics = function() {
 
 var HealthyUserMetrics = function() {
 
-    // stickiness ratio - DAU/MAU
-    renderCalculationBetweenTwoQueries(dailyActiveUsersQuery, thirtyDaysActiveUsersQuery, "#stickiness-ratio-1-day-ago", null, "percentage");
-     // stickiness ratio - DAU/MAU for 1 week ago
-    renderCalculationBetweenTwoQueries(weekBackDailyActiveUsersQuery, weekBackThirtyDaysActiveUsersQuery , "#stickiness-ratio-1-week-ago", null, "percentage");
-    // stickiness ratio - DAU/MAU for 4 weeks ago
-    renderCalculationBetweenTwoQueries(monthBackDailyActiveUsersQuery, monthBackThirtyDaysActiveUsersQuery , "#stickiness-ratio-4-weeks-ago", null, "percentage");
-    // stickiness ratio - DAU/MAU for 52 weeks ago
-    renderCalculationBetweenTwoQueries(yearBackDailyActiveUsersQuery, yearBackThirtyDaysActiveUsersQuery , "#stickiness-ratio-52-weeks-ago", null, "percentage");
+    // // stickiness ratio - DAU/MAU
+    // renderCalculationBetweenTwoQueries(dailyActiveUsersQuery, thirtyDaysActiveUsersQuery, "#stickiness-ratio-1-day-ago", null, "percentage");
+    //  // stickiness ratio - DAU/MAU for 1 week ago
+    // renderCalculationBetweenTwoQueries(weekBackDailyActiveUsersQuery, weekBackThirtyDaysActiveUsersQuery , "#stickiness-ratio-1-week-ago", null, "percentage");
+    // // stickiness ratio - DAU/MAU for 4 weeks ago
+    // renderCalculationBetweenTwoQueries(monthBackDailyActiveUsersQuery, monthBackThirtyDaysActiveUsersQuery , "#stickiness-ratio-4-weeks-ago", null, "percentage");
+    // // stickiness ratio - DAU/MAU for 52 weeks ago
+    // renderCalculationBetweenTwoQueries(yearBackDailyActiveUsersQuery, yearBackThirtyDaysActiveUsersQuery , "#stickiness-ratio-52-weeks-ago", null, "percentage");
 };
 
 
@@ -941,10 +941,11 @@ var HealthyUserMetrics = function() {
 // ><+><+><+><><+><+
 
 var RawNumberMetrics = function() {
-    console.log('!!! bailing out of RawNumberMetrics');
-    return;
 
     renderKeenMetric("#total-projects", "metric", totalProjectsQuery, defaultHeight);
+
+    console.log('!!! bailing out of RawNumberMetrics');
+    return;
 
     var propertiesAndElements = {
         'projects.public': '#public-projects',
