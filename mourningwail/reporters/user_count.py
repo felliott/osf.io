@@ -34,37 +34,6 @@ def count_user_logs(user):
 
 
 class UserCountReporter(DailyReporter):
-    def calculate_stickiness(self, date):
-        """Calculate the stickiness for date: (Unique users yesterday) / (Unique users over yesterday + 29 days) [total of 30 days]"""
-        day_start = datetime(date.year, date.month, date.day)
-        day_end = day_start + timedelta(days=1)
-
-        client = KeenClient(
-            project_id=settings.KEEN['public']['project_id'],
-            read_key=settings.KEEN['public']['read_key'],
-        )
-
-        day_end_iso = day_end.isoformat()
-        last_thirty = client.count_unique(
-            event_collection='pageviews',
-            # beginning of yesterday - 29 days = 30 total days
-            timeframe={'start': (day_start - timedelta(days=29)).isoformat(), 'end': day_end_iso},
-            target_property='user.id',
-            timezone='UTC'
-        )
-
-        last_one = client.count_unique(
-            event_collection='pageviews',
-            timeframe={'start': day_start.isoformat(), 'end': day_end_iso},
-            target_property='user.id',
-            timezone='UTC'
-        )
-
-        # avoid unlikely divide by 0 error
-        if last_thirty == 0:
-            return 0
-        return last_one / last_thirty
-
     def report(self, date):
         active_user_query = (
             Q(is_registered=True) &

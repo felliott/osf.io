@@ -14,7 +14,7 @@ class MeteredEvent(metrics.Metric):
         source = metrics.MetaField(enabled=True)
 
 
-class DailyMeteredReport(metrics.Metric):
+class DailyReport(metrics.Metric):
     """DailyMeteredReport (abstract base for the report-based metrics in mourningwail.reports)
 
     There's something we'd like to know about every so often,

@@ -44,7 +44,7 @@ new code regions:
         models for storing report data in elasticsearch
     mourningwail.reporters: 
         given a date, a reporter generates data about what happened on that date
-        `reporter.report(date)` returns iterable of `mourningwail.metrics._base.DailyMeteredReport` instances
+        `reporter.report(date)` returns iterable of `mourningwail.metrics._base.DailyReport` instances
 
 
 
