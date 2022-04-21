@@ -130,6 +130,9 @@ var getMetricTitle = function(metric, type) {
 
 // KRA-NOTE - metric objects here
 var differenceGrowthBetweenMetrics = function(metric1, metric2, totalMetric, element, colors) {
+    console.log('!!! bailing out of differenceGrowthBetweenMetrics');
+    return;
+
     var percentOne;
     var percentTwo;
     var differenceMetric = new keenDataviz()
@@ -171,6 +174,9 @@ var differenceGrowthBetweenMetrics = function(metric1, metric2, totalMetric, ele
 
 // KRA-NOTE - metric objects here
 var renderPublicPrivatePercent = function(publicMetric, privateMetric, element) {
+    console.log('!!! bailing out of renderPublicPrivatePercent');
+    return;
+
     var result;
     var differenceMetric = new keenDataviz()
         .el(element)
@@ -199,6 +205,9 @@ var renderPublicPrivatePercent = function(publicMetric, privateMetric, element) 
 
 // KRA-NOTE - metric objects here
 var renderCalculationBetweenTwoQueries = function(query1, query2, element, differenceType, calculationType, colors) {
+    console.log('!!! bailing out of renderCalculationBetweenTwoQueries');
+    return;
+
     var result;
     var differenceMetric;
 
@@ -278,10 +287,6 @@ var getWeeklyUserGain = function() {
 // KRA-NOTE: keenQuery passed in, client, metrics
 var renderKeenMetric = function(element, type, query, height, colors, keenClient) {
 
-    // if (!keenClient) {
-    //     keenClient = client;
-    // }
-
     var chart = new keenDataviz()
         .el(element)
         .height(height)
@@ -313,6 +318,9 @@ var renderKeenMetric = function(element, type, query, height, colors, keenClient
 
 // KRA-NOTE: keenQuery, makes chart, runs client
 var renderNodeLogsForOneUserChart = function(user_id) {
+    console.log('!!! bailing out of renderNodeLogsForOneUserChart');
+    return;
+
     var chart = new keenDataviz()
         .el('#yesterdays-node-logs-by-user')
         .height(bigMetricHeight)
@@ -492,6 +500,8 @@ var renderMainCounts = function() {
 //  Weekly User Gain metric
 // KR-NOTE: makes a keenDataviz
 var renderAverageUserGainMetric = function (results) {
+    console.log('!!! bailing out of renderAverageUserGainMetric');
+    return;
 
     var userGainChart = new keenDataviz()
         .el("#average-gain-metric")
@@ -514,6 +524,8 @@ var renderAverageUserGainMetric = function (results) {
 // User Gain Chart over past 7 days
 // KR-NOTE: makes a keenDataviz
 var renderWeeklyUserGainChart = function (results) {
+    console.log('!!! bailing out of renderWeeklyUserGainChart');
+    return;
 
     var userGainChart = new keenDataviz()
         .el("#user-gain-chart")
@@ -537,6 +549,8 @@ var renderWeeklyUserGainChart = function (results) {
 
 // Previous 7 Days of Users by Status
 var renderPreviousWeekOfUsersByStatus = function() {
+    console.log('!!! bailing out of renderPreviousWeekOfUsersByStatus');
+    return;
 
     var previous_week_active_users = new keenAnalysis.Query("sum", {
         eventCollection: "user_summary",
@@ -629,6 +643,9 @@ var email_domains = new keenAnalysis.Query("count", {
 });
 
 var renderEmailDomainsChart = function() {
+    console.log('!!! bailing out of renderEmailDomainsChart');
+    return;
+
     var chart = new keenDataviz()
         .el('#user-registration-by-email-domain')
         .title(' ')
@@ -656,6 +673,9 @@ var renderEmailDomainsChart = function() {
 };
 
 var NodeLogsPerUser = function() {
+    console.log('!!! bailing out of NodeLogsPerUser');
+    return;
+
     var chart = new keenDataviz()
         .el('#yesterdays-node-logs-by-user')
         .title(' ')
@@ -921,6 +941,8 @@ var HealthyUserMetrics = function() {
 // ><+><+><+><><+><+
 
 var RawNumberMetrics = function() {
+    console.log('!!! bailing out of RawNumberMetrics');
+    return;
 
     renderKeenMetric("#total-projects", "metric", totalProjectsQuery, defaultHeight);
 
