@@ -50,7 +50,7 @@ class PreprintCountReporter(DailyReporter):
             counts.append(
                 PreprintCountReport(
                     report_date=date,
-                    provider_name=preprint_provider.name,
+                    provider_key=preprint_provider._id,
                     preprint_count=resp['hits']['total'],
                 )
             )

@@ -18,25 +18,25 @@ class DailyReporter:
             agreed_on_yesterday = (verify_yesterday == yesterday)
             if not agreed_on_yesterday:
                 raise WrongYesterday(verify_yesterday, my_yesterday=yesterday)
+        return self.run_and_record_for_date(
+            report_date=yesterday,
+            also_send_to_keen=also_send_to_keen,
+        )
 
-        reports = self.report(yesterday)
-
+    def run_and_record_for_date(self, report_date, *, also_send_to_keen=False):
+        reports = self.report(report_date)
         for report in reports:
-            report.id = self.unique_report_id(report)
             report.save()
 
         if also_send_to_keen:
             keen_event_timestamp = datetime(
-                yesterday.year,
-                yesterday.month,
-                yesterday.day,
+                report_date.year,
+                report_date.month,
+                report_date.day,
                 tzinfo=pytz.utc,
             )
             keen_events = self.get_keen_events(reports, keen_event_timestamp)
             send_events_to_keen(keen_events)
-
-    def unique_report_id(self, report):
-        return report.report_date.isoformat()
 
     def report(self, date):
         raise NotImplementedError(f'{self.__name__} must implement `report`')

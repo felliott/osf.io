@@ -4,8 +4,12 @@ from ._base import DailyReport
 
 
 class PreprintCountReport(DailyReport):
-    provider_name = metrics.Keyword()
+    provider_key = metrics.Keyword()
     preprint_count = metrics.Integer()
+
+    def get_report_key(self):
+        key = super().get_report_key()
+        return f'{key}--{self.provider_key}'
 
 
 class AddonUsageReport(DailyReport):
@@ -24,8 +28,13 @@ class DailyDownloadCountReport(DailyReport):
 
 
 class InstitutionSummaryReport(DailyReport):
+    institution_key = metrics.Keyword()
     total_users = metrics.Integer()
     new_users_today = metrics.Integer()
+
+    def get_report_key(self):
+        key = super().get_report_key()
+        return f'{key}--{self.institution_key}'
 
 
 class ActiveUsersReport(DailyReport):
