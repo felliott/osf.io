@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
+from admin.base import settings
 from admin.base.settings import KEEN_CREDENTIALS
 
 
@@ -22,5 +23,7 @@ class MetricsView2(PermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
 
-        kwargs.update({"metrics_url": "/admin/api/foobar"})
+        api_report_url = '{}_/mw/report/'.format(settings.API_DOMAIN)
+
+        kwargs.update({"metrics_url": api_report_url})
         return super(MetricsView2, self).get_context_data(**kwargs)
