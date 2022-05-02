@@ -49,17 +49,18 @@ new code regions:
 
 
 new api surface:
+    /_/mw/report/ (GET viewable report names)
     /_/mw/report/<report_name>/latest/
     /_/mw/report/<report_name>/recent/?days_back=7
     /_/mw/event/page_visit/ (POST new page-visit events)
     /_/mw/query/node_analytics/<guid>/<timespan>/ (GET everything needed for the node analytics page)
 
 
-sometimes, the data we want is already in a daily report,
+often, the data we want is already in a daily report,
 so let's allow getting reports within a date range
 
 
-well-constrained query endpoint:
+might not even need a query endpoint in the near future, but if we do... make it well-constrained:
     start simple:
         COUNT
         SUM (for integer fields on reports)
@@ -76,3 +77,9 @@ python3 manage.py sync_metrics
 python3 manage.py run_daily_reports
 ```
 then check localhost:9201/mourningwail_*/_search
+
+
+for fake reports, run:
+```
+python3 manage.py fake_reports
+```

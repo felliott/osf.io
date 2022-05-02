@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import permission_required
 from django.views.decorators.http import require_GET
 from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
@@ -60,6 +59,7 @@ class KeenstylePageVisit(APIView):
 
 VIEWABLE_REPORTS = {
     'preprint_count': reports.PreprintCountReport,
+    'user_count': reports.UserCountReport,
     # 'addon_usage': reports.AddonUsageReport,
     # 'daily_download_count': reports.DailyDownloadCountReport,
     # 'institution_summary': reports.InstitutionSummaryReport,
@@ -71,6 +71,16 @@ def serialize_report(report):
     return report.to_dict()
 
 
+MAX_REPORTS = 1000
+
+
+@require_GET
+#@permission_required('osf.view_metrics')
+def get_report_names(request, report_name):
+    report_names = '\n'.join(VIEWABLE_REPORTS.keys())
+    return HttpResponse(content=report_names)
+
+
 @require_GET
 #@permission_required('osf.view_metrics')
 def get_recent_reports(request, report_name):
@@ -79,13 +89,14 @@ def get_recent_reports(request, report_name):
     except KeyError:
         return HttpResponse(status=404, content=f'unknown report: "{report_name}"')
 
-    # TODO-quest: start/end daterange
-    days_back = request.GET['days_back']
+    # TODO-quest: start/end daterange?
+    days_back = request.GET.get('days_back', 13)
 
     search_recent = (
         report_class.search()
         .filter('range', report_date={'gte': f'now/d-{days_back}d'})
         .sort('-report_date')
+        [:MAX_REPORTS]
     )
 
     search_response = search_recent.execute()
@@ -104,7 +115,7 @@ def get_latest_report(request, report_name):
 
     latest_search = (
         report_class.search()
-        .sort('-report_date')
+        .sort('-report_date', '-timestamp')
         [0]
     )
 

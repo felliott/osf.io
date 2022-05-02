@@ -42,3 +42,8 @@ class ActiveUsersReport(DailyReport):
     past_week = metrics.Integer()
     past_30_days = metrics.Integer()
     past_year = metrics.Integer()
+
+
+class UserCountReport(DailyReport):
+    total_user_count = metrics.Integer()
+    new_user_count = metrics.Integer()

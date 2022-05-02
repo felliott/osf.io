@@ -4,6 +4,7 @@ import pytz
 from django.utils import timezone
 
 from mourningwail.exceptions import WrongYesterday
+from mourningwail.metrics._base import DailyReport
 
 
 def send_events_to_keen(keen_events):
@@ -25,6 +26,9 @@ class DailyReporter:
 
     def run_and_record_for_date(self, report_date, *, also_send_to_keen=False):
         reports = self.report(report_date)
+        if isinstance(reports, DailyReport):
+            reports = [reports]
+
         for report in reports:
             report.save()
 
@@ -38,7 +42,11 @@ class DailyReporter:
             keen_events = self.get_keen_events(reports, keen_event_timestamp)
             send_events_to_keen(keen_events)
 
-    def report(self, date):
+    def report(self, report_date):
+        """build one or more reports for the given date
+
+        return mourningwail.metrics._base.DailyReport or a list of them
+        """
         raise NotImplementedError(f'{self.__name__} must implement `report`')
 
     def get_keen_events(self, reports, keen_event_timestamp):

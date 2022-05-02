@@ -4,5 +4,7 @@ from mourningwail.tasks import run_daily_reports
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **kwargs):
-        run_daily_reports()
+    def handle(self, *args, fake=False, **kwargs):
+        if fake:
+        else:
+            run_daily_reports()

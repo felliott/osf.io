@@ -12,7 +12,7 @@ from .reports import (
     # NodeCountReport,
     # OsfstorageFileCountReport,
     PreprintCountReport,
-    # UserCountReport,
+    UserCountReport,
 )
 
 
@@ -30,7 +30,7 @@ METERED_REPORTS = (
     # NodeCountReport,
     # OsfstorageFileCountReport,
     PreprintCountReport,
-    # UserCountReport,
+    UserCountReport,
 )
 
 
