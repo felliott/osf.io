@@ -68,7 +68,11 @@ VIEWABLE_REPORTS = {
 
 def serialize_report(report):
     # TODO-quest: explicit decoupling
-    return report.to_dict()
+    report_as_dict = report.to_dict()
+    return {
+        **report_as_dict,
+        'report_date': report_as_dict['report_date'].date().isoformat(),
+    }
 
 
 MAX_REPORTS = 1000
@@ -76,9 +80,10 @@ MAX_REPORTS = 1000
 
 @require_GET
 #@permission_required('osf.view_metrics')
-def get_report_names(request, report_name):
-    report_names = '\n'.join(VIEWABLE_REPORTS.keys())
-    return HttpResponse(content=report_names)
+def get_report_names(request):
+    return JsonResponse({
+        'viewable_reports': list(VIEWABLE_REPORTS.keys()),
+    })
 
 
 @require_GET
