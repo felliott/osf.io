@@ -265,7 +265,29 @@ var getWeeklyUserGain = function() {
 
 };
 
-var renderKeenMetric = function(element, type, query, height, colors, keenClient) {
+function renderReportPropertyOverTime(elementId, reports, reportProperty) {
+    const chart = c3.generate({
+        bindto: elementId,
+        data: {
+            x: 'date',
+            columns: [
+                ['date', ...reports.map(r => r.report_date)],
+                [reportProperty, ...reports.map(r => r[reportProperty])],
+            ],
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    format: '%Y-%m-%d'
+                }
+            }
+        },
+    });
+    return chart;
+}
+
+var renderKeenMetric = function(element, type, query, height, colors) {
 
     if (!keenClient) {
         keenClient = client;
@@ -414,34 +436,13 @@ var yearBackDailyActiveUsersQuery = new keenAnalysis.Query("count_unique", {
 //    user data    |
 // ><+><+><+><+><+>+
 
-var renderMainCounts = function() {
+var renderUserCounts = function() {
 
-    // Active user chart!
-    var activeUserChartQuery = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        interval: "daily",
-        targetProperty: "status.active",
-        timeframe: "previous_800_days",
-        timezone: "UTC"
-    });
-    renderKeenMetric("#active-user-chart", "line", activeUserChartQuery, bigMetricHeight);
+    const userCountReports = fetchRecentReports('user_counts', 800)
+    renderReportPropertyOverTime('#total-users', userCountReports, 'total_user_count')
+    renderReportPropertyOverTime('#new-users', userCountReports, 'new_user_count')
 
-    renderKeenMetric("#active-user-count", "metric", activeUsersQuery, bigMetricHeight);
-
-    // Daily Gain
-    var yesterday_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.active",
-        timeframe: getOneDayTimeframe(1, null)
-    });
-
-    var two_days_ago_user_count = new keenAnalysis.Query("sum", {
-        eventCollection: "user_summary",
-        targetProperty: "status.active",
-        timeframe: getOneDayTimeframe(2, null)
-    });
-    renderCalculationBetweenTwoQueries(yesterday_user_count, two_days_ago_user_count, "#daily-user-increase", 'day', 'subtraction');
-
+    /*
     // Monthly Gain
     var last_month_user_count = new keenAnalysis.Query("sum", {
         eventCollection: "user_summary",
@@ -469,6 +470,7 @@ var renderMainCounts = function() {
         timeframe: getOneDayTimeframe(1, null)
     });
     renderCalculationBetweenTwoQueries(yesterday_unconfirmed_user_count, week_ago_user_count, "#unverified-new-users", 'week', 'subtraction');
+    */
 
 };
 
@@ -675,8 +677,9 @@ var NodeLogsPerUser = function() {
 
 
 var UserGainMetrics = function() {
-    renderMainCounts();
+    renderUserCounts();
 
+    /*
     var weeklyUserGain = getWeeklyUserGain();
 
     renderWeeklyUserGainChart(weeklyUserGain);
@@ -686,6 +689,7 @@ var UserGainMetrics = function() {
     renderPreviousWeekOfUsersByStatus();
 
     NodeLogsPerUser();
+    */
 };
 
 

@@ -250,7 +250,9 @@ services:
   #################
 
   ember_osf_web:
-    image: quay.io/centerforopenscience/osf-web:develop-local
+    #image: quay.io/centerforopenscience/osf-web:develop-local
+    build:
+      context: ../ember-osf-web
     command:
       - /bin/bash
       - -c
@@ -264,14 +266,15 @@ services:
       # Uncomment below to enable collections on ember
       # - COLLECTIONS_ENABLED=true
       - BACKEND=local
-    expose:
-      - 4200
-      - 41953
+    #expose:
+      #- 4200
+        #- 41953
     ports:
-      - 4200:4200
-      - 41953:41953
+      - 4204:4200
+        #- 41953:41953
     volumes:
-      - ember_osf_web_dist_vol:/code/dist
+      - ../ember-osf-web/:/code:cached
+      - ember_osf_web_dist_vol:/code/dist:cached
     stdin_open: true
 
   #############
