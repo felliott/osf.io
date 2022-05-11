@@ -37,6 +37,7 @@ var publicColor = '#FFD300';
 
 
 function makeMetricsUrl(newQuery) {
+    newQuery['keenStyle'] = true;
     if (newQuery.event_collection === 'user_summary') {
         return metricsUrl + 'user_count/recent/';
     }

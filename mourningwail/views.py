@@ -1,4 +1,6 @@
+import re
 import json
+import logging
 
 from django.views.decorators.http import require_GET, require_POST
 from django.http import HttpResponse, JsonResponse
@@ -9,6 +11,8 @@ from api.nodes.permissions import ContributorOrPublic
 from mourningwail.metrics.events import PageVisitEvent
 from mourningwail.metrics import reports
 from mourningwail.node_analytics import get_node_analytics
+
+logger = logging.getLogger(__name__)
 
 
 class NodeAnalytics(APIView):
@@ -99,6 +103,22 @@ def get_recent_reports(request, report_name):
 
     # TODO-quest: start/end daterange?
     days_back = request.GET.get('days_back', 13)
+
+    logger.info('@@@ checking days_back')
+    if request.GET.get('keenStyle', False):
+        logger.info('@@@   got keenStyle')
+        timeframe = request.GET.get('timeframe')
+        logger.info('@@@   timeframe is: ({})'.format(timeframe))
+        if timeframe is not None:
+            m = re.match(r'previous_(\d+)_days', timeframe)
+            if m:
+                days_back = m.group(1)
+            else:
+                raise Exception('Unsupported timeframe format: "{}"'.format(timeframe))
+        else:
+            pass  # just fallback to days_back for now
+    logger.info('@@@ soldiering on, days_back:({})'.format(days_back))
+
 
     search_recent = (
         report_class.search()
