@@ -42,6 +42,10 @@ function makeMetricsUrl(newQuery) {
         return metricsUrl + 'user_count/recent/';
     }
 
+    if (newQuery.event_collection === 'preprint_summary') {
+        return metricsUrl + 'preprint_count/recent/';
+    }
+
     return metricsUrl + newQuery.event_collection + '/recent/';
 }
 
