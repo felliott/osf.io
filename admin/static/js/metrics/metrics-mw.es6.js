@@ -35,6 +35,16 @@ var dayColor = '#0C93F5';
 var privateColor = '#F20066';
 var publicColor = '#FFD300';
 
+
+function makeMetricsUrl(newQuery) {
+    if (newQuery.event_collection === 'user_summary') {
+        return metricsUrl + 'user_count/recent/';
+    }
+
+    return metricsUrl + newQuery.event_collection + '/recent/';
+}
+
+
 /**
  * Configure a timeframe for the past day for a keen query
  * Can either be used to get a time frame for one day from today, or one day
@@ -303,7 +313,7 @@ var renderKeenMetric = function(element, type, query, height, colors) {
     newQuery['analysis_type'] = query.analysis;
 
     $.ajax({
-        url: metricsUrl,
+        url: makeMetricsUrl(newQuery),
         type: "get",
         data: newQuery,
     }).done(function (res) {
@@ -342,7 +352,8 @@ var renderNodeLogsForOneUserChart = function(user_id) {
     newQuery['analysis_type'] = 'count';
 
     $.ajax({
-        url: metricsUrl,
+        url: metricsUrl + newQuery.event_collection + '/recent/',
+        // url: metricsUrl,
         type: "get",
         data: newQuery,
     }).done(function (res) {
@@ -653,7 +664,8 @@ var renderEmailDomainsChart = function() {
     var newQuery = email_domains.params;
     newQuery['analysis_type'] = email_domains.analysis;
     $.ajax({
-        url: metricsUrl,
+        url: metricsUrl + newQuery.event_collection + '/recent/',
+        // url: metricsUrl,
         type: "get",
         data: newQuery,
     }).done(function (res) {
@@ -699,7 +711,8 @@ var NodeLogsPerUser = function() {
     newQuery['analysis_type'] = 'count';
 
     $.ajax({
-        url: metricsUrl,
+        url: metricsUrl + newQuery.event_collection + '/recent/',
+        // url: metricsUrl,
         type: "get",
         data: newQuery,
     }).done(function (res) {
