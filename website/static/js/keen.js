@@ -8,8 +8,14 @@ var Cookie = require('js-cookie');
 var lodashGet = require('lodash.get');
 var lodash = require('lodash');
 var keenTracking = require('keen-tracking');
+var $osf = require('js/osfHelpers');
 
 var KeenTracker = (function() {
+
+    function _mwPageVisitUrl() {
+        const url = new URL('/_/mw/event/keenstyle_page_visit/', contextVars.apiV2Domain);
+        return url.toString();
+    }
 
     function _nowUTC() {
         var now = new Date();
@@ -100,14 +106,12 @@ var KeenTracker = (function() {
     }  // end _defaultKeenPayload
 
     function _trackCustomEvent(client, collection, eventData) {
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/analytics/log_pageview/',
-            contentType: 'application/json',
-            data: JSON.stringify({
+        $osf.ajaxJSON('POST', _mwPageVisitUrl(), {
+            isCors: true,
+            data: {
                 collection: collection,
                 eventData: lodash.defaults(eventData, _defaultKeenPayload()),
-            }),
+            },
         }).done(function(response) {
             console.debug('eventSINGULAR: success, events were sent!', response);
         }).fail(function(error) {
@@ -132,13 +136,11 @@ var KeenTracker = (function() {
     }
 
     function _trackCustomEvents(client, events) {
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/analytics/log_pageview/',
-            contentType: 'application/json',
-            data: JSON.stringify({            
+        $osf.ajaxJSON('POST', _mwPageVisitUrl(), {
+            isCors: true,
+            data: {            
                 events: lodash.defaults(events, _defaultKeenPayload())
-            }),
+            },
         }).done(function(response) {
             console.debug('eventsPLURAL: success, events were sent!', response);
         }).fail(function(error) {

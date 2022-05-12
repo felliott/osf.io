@@ -1,4 +1,6 @@
-from django.views.decorators.http import require_GET
+import json
+
+from django.views.decorators.http import require_GET, require_POST
 from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 
@@ -42,19 +44,20 @@ class PageVisit(APIView):
         return HttpResponse(status=201)
 
 
-class KeenstylePageVisit(APIView):
-    # for compatibility with the requests we were sending to keen.io
+@require_POST
+def log_keenstyle_page_visit(request):
+    request_bod = json.loads(request.body)
+    keen_eventdata = request_bod['eventData']
 
-    view_category = 'mourningwail'
-    view_name = 'keenstyle-page-visit'
-
-    def post(self, request):
-        # keen_payload = request.json()
-
-        PageVisitEvent.record(
-            # TODO-quest: translate from keen load
-        )
-        return HttpResponse(status=201)
+    PageVisitEvent.record(
+        referer_url=keen_eventdata.get('referrer', {}).get('url'),
+        page_path=keen_eventdata.get('page', {}).get('url'),
+        page_title=keen_eventdata.get('page', {}).get('title'),
+        session_id=keen_eventdata.get('anon', {}).get('id'),
+        node_guid=keen_eventdata.get('node', {}).get('id'),
+        keenstyle_event_info=keen_eventdata,
+    )
+    return HttpResponse(status=201)
 
 
 VIEWABLE_REPORTS = {

@@ -4,27 +4,33 @@ from elasticsearch_metrics import metrics
 from mourningwail.metrics._base import MeteredEvent
 
 
-class FileDownloadEvent(MeteredEvent):
-    file_guid = metrics.Keyword()
-
-
 class PageVisitEvent(MeteredEvent):
-    referer_domain = metrics.Keyword()
-    hour_of_day = metrics.Integer()
+    # fields that should be provided by the client
+    referer_url = metrics.Keyword()
     session_id = metrics.Keyword()
+    node_guid = metrics.Keyword()
+    page_title = metrics.Keyword()
+    page_path = metrics.Keyword()
 
-    # TODO-quest i don't think copy_to works this way
-    page_title = metrics.Keyword(copy_to='path_n_title')
-    page_path = metrics.Keyword(copy_to='path_n_title')
+    # fields generated from the above
     path_n_title = metrics.Keyword()
+    hour_of_day = metrics.Integer()
 
-    def record(self, *, timestamp=None, **kwargs):
+    # whatever dumpbucket
+    keenstyle_event_info = metrics.Object(dynamic=True)
+
+    @classmethod
+    def record(cls, *, timestamp=None, **kwargs):
         timestamp = timestamp or timezone.now()
         return super().record(
             timestamp=timestamp,
             hour_of_day=timestamp.hour,
             **kwargs,
         )
+
+
+class FileDownloadEvent(MeteredEvent):
+    file_guid = metrics.Keyword()
 
 
 class SystemLogEvent(MeteredEvent):

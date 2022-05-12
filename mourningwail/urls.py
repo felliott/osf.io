@@ -11,7 +11,8 @@ urlpatterns = [
     url(r'^report/(?P<report_name>[a-z0-9_]+)/latest/$', views.get_latest_report, name='latest-report'),
     url(r'^report/(?P<report_name>[a-z0-9_]+)/recent/$', views.get_recent_reports, name='recent-reports'),
 
-    url(r'^event/page_visit/$', views.PageVisit.as_view(), name=views.PageVisit.view_name),
+    #url(r'^event/page_visit/$', views.PageVisit.as_view(), name=views.PageVisit.view_name),
+    url(r'^event/keenstyle_page_visit/$', views.log_keenstyle_page_visit, name='keenstyle-page-visit'),
 
     url(r'^query/node_analytics/(?P<node_guid>[a-z0-9]+)/(?P<timespan>week|fortnight|month)/$', views.NodeAnalytics.as_view(), name=views.NodeAnalytics.view_name),
 
