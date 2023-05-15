@@ -327,15 +327,27 @@ def node_addons(auth, node, **kwargs):
     addon_settings = serialize_addons(node, auth)
 
     ret['addon_capabilities'] = settings.ADDON_CAPABILITIES
+    # logger.info('@@@ addon_caps: {}'.format(settings.ADDON_CAPABILITIES))
 
     # If an addon is default you cannot connect/disconnect so we don't have to load it.
     ret['addon_settings'] = [addon for addon in addon_settings]
+    plump = []
+    for addon_set in addon_settings:
+        torpid = {}
+        for k, v in addon_set.items():
+            if k not in ['addon_capabilities', 'template_lookup']:
+                torpid[k] = v
+        plump.append(torpid)
+    import json
+    logger.info('@@@ addon_settings: {}'.format(json.dumps(plump)))
 
     # Addons can have multiple categories, but we only want a set of unique ones being used.
     ret['addon_categories'] = set([item for addon in addon_settings for item in addon['categories']])
+    logger.info('@@@ addon_categories: {}'.format(ret['addon_categories']))
 
     # The page only needs to load enabled addons and it refreshes when a new addon is being enabled.
     ret['addon_js'] = collect_node_config_js([addon for addon in addon_settings if addon['enabled']])
+    logger.info('@@@ addon_js: {}'.format(ret['addon_js']))
 
     return ret
 
