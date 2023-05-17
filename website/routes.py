@@ -1675,6 +1675,13 @@ def make_url_map(app):
         ),
 
         Rule(
+            '/user/auth/',
+            'get',
+            addon_views.get_user_auth,
+            json_renderer,
+        ),
+
+        Rule(
             [
                 '/project/<pid>/waterbutler/logs/',
                 '/project/<pid>/node/<nid>/waterbutler/logs/',

@@ -78,6 +78,23 @@ var OAuthAddonSettingsViewModel = oop.defclass({
         self.accounts = ko.observableArray();
         self.message = ko.observable('');
         self.messageClass = ko.observable('');
+        window.addEventListener(
+            'message',
+            function(event) {
+                console.error('$$$ ogtta msg');
+                if (event.origin !== "http://localhost:8011") {
+                    return;
+                }
+                if (event.data['addon'] === 'box') {
+                    console.debug('heard back from the meowmeow boys about box');
+                }
+                else {
+                    console.debug('heard back, but ignored');
+                }
+            },
+            false,
+        );
+
     },
     setMessage: function(msg, cls) {
         var self = this;
@@ -86,17 +103,6 @@ var OAuthAddonSettingsViewModel = oop.defclass({
     },
     connectAccount: function() {
         var self = this;
-        window.addEventListener(
-            'message',
-            function(event) {
-                console.error('$$$ ogtta msg');
-                if (event.origin !== "http://localhost:8011") {
-                    return;
-                }
-                console.debug('heard back from the meowmeow boys');
-            },
-            false,
-        );
         window.oauthComplete = function() {
             self.setMessage('');
             var accountCount = self.accounts().length;
@@ -117,7 +123,7 @@ var OAuthAddonSettingsViewModel = oop.defclass({
             });
         };
         if (self.name === 'box') {
-            window.open('http://localhost:8011/charon/box/callback', 'charon-land');
+            window.open('http://localhost:8011/charon/box', 'charon-land');
         } else {
             window.open('/oauth/connect/' + self.name + '/');
         }

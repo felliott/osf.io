@@ -254,6 +254,38 @@ def get_metric_class_for_action(action, from_mfr):
 
 
 @collect_auth
+def get_user_auth(auth, **kwargs):
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info('>>> in get_user_auth!')
+    cas_resp = None
+    # Central Authentication Server OAuth Bearer Token
+    authorization = request.headers.get('Authorization')
+    if authorization and authorization.startswith('Bearer '):
+        client = cas.get_client()
+        try:
+            access_token = cas.parse_auth_header(authorization)
+            cas_resp = client.profile(access_token)
+        except cas.CasError as err:
+            sentry.log_exception()
+            # NOTE: We assume that the request is an AJAX request
+            return json_renderer(err)
+        if cas_resp.authenticated and not getattr(auth, 'user'):
+            auth.user = OSFUser.load(cas_resp.user)
+
+    # missing: decrypt jwe cookie encoding
+    if not auth.user:
+        auth.user = OSFUser.from_cookie(auth.get('cookie', ''))
+
+    return {
+        'data': {
+            'user_id': auth.user.id,
+            'hey_there': 'buddy',
+        }
+    }
+
+
+@collect_auth
 def get_auth(auth, **kwargs):
     cas_resp = None
     # Central Authentication Server OAuth Bearer Token
