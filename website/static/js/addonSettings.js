@@ -86,6 +86,17 @@ var OAuthAddonSettingsViewModel = oop.defclass({
     },
     connectAccount: function() {
         var self = this;
+        window.addEventListener(
+            'message',
+            function(event) {
+                console.error('$$$ ogtta msg');
+                if (event.origin !== "http://localhost:8011") {
+                    return;
+                }
+                console.debug('heard back from the meowmeow boys');
+            },
+            false,
+        );
         window.oauthComplete = function() {
             self.setMessage('');
             var accountCount = self.accounts().length;
@@ -105,7 +116,11 @@ var OAuthAddonSettingsViewModel = oop.defclass({
                 }
             });
         };
-        window.open('/oauth/connect/' + self.name + '/');
+        if (self.name === 'box') {
+            window.open('http://localhost:8011/charon/box/callback', 'charon-land');
+        } else {
+            window.open('/oauth/connect/' + self.name + '/');
+        }
     },
     askDisconnect: function(account) {
         var self = this;
