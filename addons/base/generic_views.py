@@ -23,6 +23,14 @@ def import_auth(addon_short_name, Serializer):
     def _import_auth(auth, node_addon, user_addon, **kwargs):
         """Import add-on credentials from the currently logged-in user to a node.
         """
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info('### in import_auth! auth ib:({})'.format(auth))
+        logger.info('### in import_auth! node_addon ib:({})'.format(auth))
+        logger.info('### in import_auth! user_addon ib:({})'.format(auth))
+        logger.info('### in import_auth! kwargs ib:({})'.format(kwargs))
+        logger.info('### in import_auth! request_body ib:({})'.format(request.json))
+
         external_account = ExternalAccount.load(
             request.json['external_account_id']
         )

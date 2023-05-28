@@ -19,6 +19,9 @@ from website.util import web_url_for
 
 _load_node_or_fail = lambda pk: get_or_http_error(AbstractNode, pk)
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def _kwargs_to_nodes(kwargs):
     """Retrieve project and component objects from keyword arguments.
@@ -305,6 +308,7 @@ must_be_contributor_or_public_but_not_anonymized = _must_be_contributor_factory(
 must_be_contributor_and_not_group_member = _must_be_contributor_factory(include_public=True, include_view_only_anon=False, include_groups=False)
 
 
+## GRAVYVALET: note - called by addons.base.generic_views.import_auth
 def must_have_addon(addon_name, model):
     """Decorator factory that ensures that a given addon has been added to
     the target node. The decorated function will throw a 404 if the required
@@ -384,6 +388,7 @@ def must_be_addon_authorizer(addon_name):
     return wrapper
 
 
+## GRAVYVALET: note - called by addons.base.generic_views.import_auth
 def must_have_permission(permission):
     """Decorator factory for checking permissions. Checks that user is logged
     in and has necessary permissions for node. Node must be passed in keyword
@@ -399,6 +404,7 @@ def must_have_permission(permission):
 
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
+            logger.info('&&& in @must_have_permissions, args:({}) kwargs:({})'.format(args, kwargs))
             # Ensure `project` and `node` kwargs
             if kwargs.get('nid') or kwargs.get('pid'):
                 _inject_nodes(kwargs)

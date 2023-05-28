@@ -122,7 +122,7 @@ var OAuthAddonSettingsViewModel = oop.defclass({
                 }
             });
         };
-        if (self.name === 'box') {
+        if (self.name === 'box-forcefail') {
             window.open('http://localhost:8011/charon/box', 'charon-land');
         } else {
             window.open('/oauth/connect/' + self.name + '/');

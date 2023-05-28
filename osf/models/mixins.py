@@ -466,6 +466,8 @@ class Taggable(models.Model):
 
 
 class AddonModelMixin(models.Model):
+    ## GRAVYVALET: todo - some of this will be split between osf & gv
+    ## GRAVYVALET: todo - other bits will need to be updated to interact with gv
 
     # from addons.base.apps import BaseAddonConfig
     settings_type = None
@@ -562,6 +564,7 @@ class AddonModelMixin(models.Model):
         :param dict config: Mapping between add-on names and enabled / disabled
             statuses
         """
+        ## GRAVYVALET: note - this is probably wholly inside gv
         for addon_name, enabled in config.items():
             if enabled:
                 self.add_addon(addon_name, auth)

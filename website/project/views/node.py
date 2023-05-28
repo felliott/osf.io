@@ -412,6 +412,8 @@ def collect_node_config_js(addons):
 @must_have_permission(WRITE)
 @must_not_be_registration
 def node_choose_addons(auth, node, **kwargs):
+    ## GRAVYVALET: todo - will be replaced by call to gv
+    ## GRAVYVALET: note - .config_addons() is defined in osf.models.AddonModelMixin
     node.config_addons(request.json, auth)
 
 
