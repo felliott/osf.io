@@ -310,11 +310,23 @@ var FolderPickerViewModel = oop.defclass({
     fetchFromServer: function() {
         var self = this;
         var ret = $.Deferred();
-        var request = $.ajax({
-            url: self.url,
-            type: 'GET',
-            dataType: 'json'
-        });
+        console.error('@@@@ url set in fetchFromServer: ' + self.url + ' >>> meow');
+        // var request = $.ajax({
+        //     url: self.url,
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     xhrFields: {withCredentials: true},
+        // });
+        var request = $osf.ajaxJSON(
+            'GET',
+            self.url,
+            {
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        );
         request.done(function(response) {
             self.loadedSettings(true);
             ret.resolve(response.result);
@@ -357,7 +369,17 @@ var FolderPickerViewModel = oop.defclass({
                 }
             });
         }
-        return $osf.putJSON(self.urls().config, self._serializeSettings())
+        return $osf.ajaxJSON(
+            'PUT',
+            self.urls().configPUT,
+            {
+                data: self._serializeSettings(),
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        )
             .done(onSubmitSuccess)
             .fail(onSubmitError);
     },
@@ -394,7 +416,17 @@ var FolderPickerViewModel = oop.defclass({
             'external_library_id': self.selectedLibrary().split(/,(.+)/)[0],
             'external_library_name': self.selectedLibrary().split(/,(.+)/)[1]
         };
-        return $osf.putJSON(self.urls().config, metadata)
+        return $osf.ajaxJSON(
+            'PUT',
+            self.urls().config,
+            {
+                data: metadata,
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        )
             .done(onSubmitSuccess)
             .fail(onSubmitError);
     },
@@ -456,7 +488,18 @@ var FolderPickerViewModel = oop.defclass({
     },
     _importAuthConfirm: function() {
         var self = this;
-        return $osf.putJSON(self.urls().importAuth, self._importAuthPayload())
+        console.error('@@@@ trying to importAuth from box nodesettings');
+        return $osf.ajaxJSON(
+            'PUT',
+            self.urls().importAuth,
+            {
+                data: self._importAuthPayload(),
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            }
+        )
             .done(self.onImportSuccess.bind(self))
             .fail(self.onImportError.bind(self));
     },
@@ -517,10 +560,16 @@ var FolderPickerViewModel = oop.defclass({
      */
     _deauthorizeConfirm: function(){
         var self = this;
-        var request = $.ajax({
-            url: self.urls().deauthorize,
-            type: 'DELETE'
-        });
+        var request = $osf.ajaxJSON(
+            'DELETE',
+            self.urls().deauthorize,
+            {
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        );
         request.done(function() {
             // Update observables
             self.nodeHasAuth(false);

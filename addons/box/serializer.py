@@ -49,11 +49,14 @@ class BoxSerializer(StorageAddonSerializer):
             # 'folders': node.api_url_for('box_folder_list'),
             'folders': 'http://localhost:8011/charon/projects/{}/box/folders/'.format(guid),
 
-            # 'config': node.api_url_for('box_set_config'),
-            'config': 'http://localhost:8011/charon/projects/{}/box/settings/'.format(guid),
+            'config': node.api_url_for('box_set_config'),
+            # 'config': 'http://localhost:8011/charon/projects/{}/box/settings/'.format(guid),
 
-            'deauthorize': node.api_url_for('box_deauthorize_node'),
-            # 'deauthorize': 'http://localhost:8011/charon/projects/{}/box/user_auth/'.format(guid),
+            # 'configPUT': node.api_url_for('box_set_config'),
+            'configPUT': 'http://localhost:8011/charon/projects/{}/box/settings/'.format(guid),
+
+            # 'deauthorize': node.api_url_for('box_deauthorize_node'),
+            'deauthorize': 'http://localhost:8011/charon/projects/{}/box/user_auth/'.format(guid),
 
             # 'accounts': node.api_url_for('box_account_list'),
             'accounts': 'http://localhost:8011/charon/settings/box/accounts/',

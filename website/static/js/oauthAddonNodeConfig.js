@@ -66,9 +66,23 @@ var OauthAddonFolderPickerViewModel = oop.extend(FolderPickerViewModel, {
                     // Update view model based on response
                     self.updateAccounts().then(function() {
                         try{
-                            $osf.putJSON(
-                                self.urls().importAuth, {
-                                    external_account_id: self.accounts()[0].id
+                            // $osf.putJSON(
+                            //     self.urls().importAuth, {
+                            //         external_account_id: self.accounts()[0].id
+                            //     }
+                            // )
+                            console.error('+++ in oauthAddonNodeConfig..connectAccount...');
+                            $osf.ajaxJSON(
+                                'PUT',
+                                self.urls().importAuth,
+                                {
+                                    data: {
+                                        external_account_id: self.accounts()[0].id
+                                    },
+                                    isCors: true,
+                                    fields: {
+                                        xhrFields: {withCredentials: true},
+                                    },
                                 }
                             ).done(self.onImportSuccess.bind(self)
                             ).fail(self.onImportError.bind(self));
@@ -176,10 +190,24 @@ var OauthAddonFolderPickerViewModel = oop.extend(FolderPickerViewModel, {
     connectExistingAccount: function(account_id) {
         var self = this;
         if (account_id !== null) {
-            return $osf.putJSON(
-                self.urls().importAuth, {
-                    external_account_id: account_id
-                }
+            // return $osf.putJSON(
+            //     self.urls().importAuth, {
+            //         external_account_id: account_id
+            //     }
+            // )
+            console.error('+++ in oauthAddonNodeConfig..connectExistingAccount...');
+            return $osf.ajaxJSON(
+                'PUT',
+                self.urls().importAuth,
+                {
+                    data: {
+                        external_account_id: account_id
+                    },
+                    isCors: true,
+                    fields: {
+                        xhrFields: {withCredentials: true},
+                    },
+                },
             ).done(self.onImportSuccess.bind(self)
             ).fail(self.onImportError.bind(self));
         }
@@ -187,7 +215,17 @@ var OauthAddonFolderPickerViewModel = oop.extend(FolderPickerViewModel, {
     },
     updateAccounts: function() {
         var self = this;
-        var request = $.get(self.urls().accounts);
+        // var request = $.get(self.urls().accounts);
+        var request = $osf.ajaxJSON(
+            'GET',
+            self.urls().accounts,
+            {
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        );
         return request.done(function(data) {
             self.accounts(data.accounts.map(function(account) {
                 return {

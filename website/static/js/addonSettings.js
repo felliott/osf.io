@@ -33,10 +33,16 @@ var ExternalAccount = oop.defclass({
     _deauthorizeNodeConfirm: function(node) {
         var self = this;
         var url = node.urls.deauthorize;
-        var request = $.ajax({
-                url: url,
-                type: 'DELETE'
-            })
+        var request = $osf.ajaxJSON(
+            'DELETE',
+            url,
+            {
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            }
+        )
             .done(function(data) {
                 self.connectedNodes.remove(node);
             })
@@ -153,10 +159,16 @@ var OAuthAddonSettingsViewModel = oop.defclass({
     disconnectAccount: function(account) {
         var self = this;
         var url = '/api/v1/oauth/accounts/' + account.id + '/';
-        var request = $.ajax({
-            url: url,
-            type: 'DELETE'
-        });
+        var request = $osf.ajaxJSON(
+            'DELETE',
+            url,
+            {
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        );
         request.done(function(data) {
             self.updateAccounts();
         });
@@ -174,6 +186,7 @@ var OAuthAddonSettingsViewModel = oop.defclass({
     updateAccounts: function() {
         var self = this;
         var url = '/api/v1/settings/' + self.name + '/accounts/';
+        console.error('??? trying to updateAccounts at ' + url + ' without osfHelpers');
         var request = $.get(url);
         request.done(function(data) {
             self.accounts($.map(data.accounts, function(account) {

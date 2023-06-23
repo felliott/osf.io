@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import time
 from rest_framework import status as http_status
 import functools
@@ -12,6 +13,9 @@ from framework.flask import redirect
 from framework.exceptions import HTTPError
 from .core import Auth
 from website import settings
+
+
+logger = logging.getLogger(__name__)
 
 
 # TODO [CAS-10][OSF-7566]: implement long-term fix for URL preview/prefetch
@@ -37,6 +41,9 @@ def collect_auth(func):
 
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
+        logger.info('ªªªª collect_auth: args:({})'.format(list(args)))
+        logger.info('ªªªª collect_auth: kwargs:({})'.format(dict(kwargs)))
+        logger.info('ªªªª collect_auth: req_args:({})'.format(request.args.to_dict()))
         kwargs['auth'] = Auth.from_kwargs(request.args.to_dict(), kwargs)
         return func(*args, **kwargs)
 

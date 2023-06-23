@@ -257,7 +257,9 @@ def get_metric_class_for_action(action, from_mfr):
 def get_user_auth(auth, **kwargs):
     import logging
     logger = logging.getLogger(__name__)
-    logger.info('>>> in get_user_auth!')
+    logger.info('>>> in get_user_auth! auth:({})'.format(auth))
+    logger.info('>>> in get_user_auth! kwargs:({})'.format(dict(kwargs)))
+
     cas_resp = None
     # Central Authentication Server OAuth Bearer Token
     authorization = request.headers.get('Authorization')
@@ -273,13 +275,16 @@ def get_user_auth(auth, **kwargs):
         if cas_resp.authenticated and not getattr(auth, 'user'):
             auth.user = OSFUser.load(cas_resp.user)
 
+    logger.info('>>>  get_user_auth: auth object is:({})'.format(auth))
+    logger.info('>>>  get_user_auth: auth user is:({})'.format(auth.user))
     # missing: decrypt jwe cookie encoding
     if not auth.user:
+        logger.info('>>>  get_user_auth: kwargs:({})'.format(dict(kwargs)))
         auth.user = OSFUser.from_cookie(auth.get('cookie', ''))
 
     return {
         'data': {
-            'user_id': auth.user.id,
+            'user_id': auth.user._id,
             'hey_there': 'buddy',
         }
     }
