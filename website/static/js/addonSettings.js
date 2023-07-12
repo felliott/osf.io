@@ -8,6 +8,7 @@ var oop = require('js/oop');
 
 var $osf = require('js/osfHelpers');
 
+var USE_CHARON = true;
 
 var ConnectedProject = function(data) {
     var self = this;
@@ -128,9 +129,12 @@ var OAuthAddonSettingsViewModel = oop.defclass({
                 }
             });
         };
-        if (self.name === 'box-forcefail') {
+        console.error('$$$ decision time!');
+        if (USE_CHARON && self.name === 'box') {
+            console.error('$$$   -- CORRECT!');
             window.open('http://localhost:8011/charon/box/connect', 'charon-land');
         } else {
+            console.error('$$$    --- FAIL SO HARD!!');
             window.open('/oauth/connect/' + self.name + '/');
         }
     },
@@ -186,8 +190,21 @@ var OAuthAddonSettingsViewModel = oop.defclass({
     updateAccounts: function() {
         var self = this;
         var url = '/api/v1/settings/' + self.name + '/accounts/';
+        if (USE_CHARON && self.name === 'box') {
+            url = 'http://localhost:8011/charon/settings/box/accounts';
+        }
         console.error('??? trying to updateAccounts at ' + url + ' without osfHelpers');
-        var request = $.get(url);
+        // var request = $.get(url);
+        var request = $osf.ajaxJSON(
+            'GET',
+            url,
+            {
+                isCors: true,
+                fields: {
+                    xhrFields: {withCredentials: true},
+                },
+            },
+        );
         request.done(function(data) {
             self.accounts($.map(data.accounts, function(account) {
                 return new ExternalAccount(account);
