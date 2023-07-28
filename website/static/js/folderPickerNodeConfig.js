@@ -322,9 +322,6 @@ var FolderPickerViewModel = oop.defclass({
             self.url,
             {
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             },
         );
         request.done(function(response) {
@@ -375,9 +372,6 @@ var FolderPickerViewModel = oop.defclass({
             {
                 data: self._serializeSettings(),
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             },
         )
             .done(onSubmitSuccess)
@@ -422,9 +416,6 @@ var FolderPickerViewModel = oop.defclass({
             {
                 data: metadata,
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             },
         )
             .done(onSubmitSuccess)
@@ -495,9 +486,6 @@ var FolderPickerViewModel = oop.defclass({
             {
                 data: self._importAuthPayload(),
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             }
         )
             .done(self.onImportSuccess.bind(self))
@@ -565,9 +553,6 @@ var FolderPickerViewModel = oop.defclass({
             self.urls().deauthorize,
             {
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             },
         );
         request.done(function() {

@@ -278,11 +278,16 @@ var putJSON = function(url, data, success, error) {
 * @return {Object} xhr
 */
 var setXHRAuthorization = function (xhr, options) {
+    console.debug('∑∑∑∑ here some in setXHRAuthorization');
     if (navigator.appVersion.indexOf('MSIE 9.') === -1) {
+        console.debug('∑∑∑∑ donglop');
         xhr.withCredentials = true;
+        xhr.crossOrigin = true;
         if (options) {
             options.withCredentials = true;
+            options.crossOrigin = true;
             options.xhrFields = {withCredentials:true};
+            console.debug('∑∑∑∑ gotta options: ', options);
         }
     }
     return xhr;

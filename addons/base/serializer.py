@@ -1,7 +1,10 @@
 import abc
+import logging
 
 from framework.auth.decorators import collect_auth
 from website.util import api_url_for, web_url_for
+
+logger = logging.getLogger(__name__)
 
 
 class AddonSerializer(object):
@@ -99,6 +102,7 @@ class OAuthAddonSerializer(AddonSerializer):
         if self.user_settings:
             retval['accounts'] = self.serialized_accounts
 
+        logger.error('====> serialized user_settings:({})'.format(retval))
         return retval
 
     def serialize_account(self, external_account):

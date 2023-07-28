@@ -39,9 +39,6 @@ var ExternalAccount = oop.defclass({
             url,
             {
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             }
         )
             .done(function(data) {
@@ -168,9 +165,6 @@ var OAuthAddonSettingsViewModel = oop.defclass({
             url,
             {
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             },
         );
         request.done(function(data) {
@@ -200,9 +194,6 @@ var OAuthAddonSettingsViewModel = oop.defclass({
             url,
             {
                 isCors: true,
-                fields: {
-                    xhrFields: {withCredentials: true},
-                },
             },
         );
         request.done(function(data) {

@@ -142,8 +142,13 @@ class NodeSettings(BaseOAuthNodeSettings, BaseStorageAddon):
 
         try:
             Provider(self.external_account).refresh_oauth_key()
-            oauth = OAuth2(client_id=settings.BOX_KEY, client_secret=settings.BOX_SECRET, access_token=ensure_str(self.external_account.oauth_key))
+            oauth = OAuth2(
+                client_id=settings.BOX_KEY,
+                client_secret=settings.BOX_SECRET,
+                access_token=ensure_str(self.external_account.oauth_key)
+            )
             client = Client(oauth)
+            logger.error('^^^^ oauth_key:({})'.format(self.external_account.oauth_key))
         except BoxAPIException:
             raise HTTPError(http_status.HTTP_403_FORBIDDEN)
 

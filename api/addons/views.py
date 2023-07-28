@@ -1,4 +1,5 @@
 import re
+import logging
 
 from django.apps import apps
 from rest_framework.exceptions import NotFound, PermissionDenied
@@ -14,6 +15,8 @@ from api.base.settings import ADDONS_OAUTH
 from api.base.views import JSONAPIBaseView
 
 from website import settings as osf_settings
+
+logger = logging.getLogger(__name__)
 
 
 class AddonSettingsMixin(object):
@@ -49,13 +52,21 @@ class AddonSettingsMixin(object):
 
         if addon_settings and check_object_permissions:
             authorizer = None
+            logger.error('√√√ checking addon permissions: alpha:({})'.format(''))
             if owner_type == 'user':
                 authorizer = addon_settings.owner
+                logger.error('√√√     owner is user: authorizer:({})'.format(authorizer))
             elif getattr(addon_settings, 'user_settings', None):
                 authorizer = addon_settings.user_settings.owner
+                logger.error('√√√     owner is NOT user: authorizer:({})'.format(authorizer))
+
+            logger.error('√√√     request user is:({})'.format(self.request.user))
+            logger.error('√√√     request is:({})'.format(self.request))
             if authorizer and authorizer != self.request.user:
+                logger.error('√√√     NOT THE SAME')
                 raise PermissionDenied('Must be addon authorizer to list folders')
 
+        logger.error('√√√     we are THE SAME')
         return addon_settings
 
 class AddonList(JSONAPIBaseView, generics.ListAPIView, ListFilterMixin):

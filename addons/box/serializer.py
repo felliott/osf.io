@@ -37,20 +37,20 @@ class BoxSerializer(StorageAddonSerializer):
         node = self.node_settings.owner
         guid = node.guids.first()._id
         return {
-            # 'auth': api_url_for('oauth_connect', service_name='box'),
-            'auth': 'http://localhost:8011/charon/box/connect',
+            'auth': api_url_for('oauth_connect', service_name='box'),
+            # 'auth': 'http://localhost:8011/charon/box/connect',
 
-            # 'importAuth': node.api_url_for('box_import_auth'),
-            'importAuth': 'http://localhost:8011/charon/projects/{}/box/user_auth/'.format(guid),
+            'importAuth': node.api_url_for('box_import_auth'),
+            # 'importAuth': 'http://localhost:8011/charon/projects/{}/box/user_auth/'.format(guid),
 
-            # 'files': node.web_url_for('collect_file_trees'),
             'files': node.web_url_for('collect_file_trees'),
+            # 'files': node.web_url_for('collect_file_trees'),
 
             # 'folders': node.api_url_for('box_folder_list'),
             'folders': 'http://localhost:8011/charon/projects/{}/box/folders/'.format(guid),
 
-            'config': node.api_url_for('box_set_config'),
-            # 'config': 'http://localhost:8011/charon/projects/{}/box/settings/'.format(guid),
+            # 'config': node.api_url_for('box_set_config'),
+            'config': 'http://localhost:8011/charon/projects/{}/box/settings/'.format(guid),
 
             # 'configPUT': node.api_url_for('box_set_config'),
             'configPUT': 'http://localhost:8011/charon/projects/{}/box/settings/'.format(guid),

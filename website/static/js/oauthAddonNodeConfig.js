@@ -115,6 +115,7 @@ var OauthAddonFolderPickerViewModel = oop.extend(FolderPickerViewModel, {
                     if (item.data.links) {
                         return item.data.links.children;
                     }
+                    console.debug('ßßß folders ib: ', item.data.urls.folders);
                     return item.data.urls.folders;
                 }
             },
