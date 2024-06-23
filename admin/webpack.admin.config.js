@@ -14,7 +14,10 @@ var staticAdminPath = function(dir) {
 // Adding bundle tracker to plugins
 var plugins = common.plugins.concat([
     // for using webpack with Django
-    new BundleTracker({filename: './webpack-stats.json'}),
+    new BundleTracker({
+        path: path.resolve(__dirname),
+        filename: 'webpack-stats.json'
+    }),
     new webpack.LoaderOptionsPlugin({
         debug: true,
         minimize: true

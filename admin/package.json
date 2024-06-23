@@ -22,7 +22,7 @@
     "simple-statistics": "7.7.3",
     "urijs": "^1.19.7",
     "webpack": "3.12.0",
-    "webpack-bundle-tracker": "0.0.9"
+    "webpack-bundle-tracker": "3.1.0"
   },
   "scripts": {
     "webpack-prod": "webpack --config webpack.prod.config.js"
