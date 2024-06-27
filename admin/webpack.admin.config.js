@@ -1,9 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
-var common = require('../webpack.common.config.js');
+var common = require('./webpack.common.config.js');
 var BundleTracker = require('webpack-bundle-tracker');
-
-var websiteRoot = path.resolve(__dirname, '..', 'website', 'static');
 
 var adminRoot = path.resolve(__dirname, 'static');
 
@@ -14,7 +12,7 @@ var staticAdminPath = function(dir) {
 // Adding bundle tracker to plugins
 var plugins = common.plugins.concat([
     // for using webpack with Django
-    new BundleTracker({filename: './webpack-stats.json'}),
+    // new BundleTracker({filename: './webpack-stats.json'}),
     new webpack.LoaderOptionsPlugin({
         debug: true,
         minimize: true
@@ -44,5 +42,6 @@ var config = Object.assign({}, common, {
     plugins: plugins,
     devtool: 'source-map',
 });
-config.resolve.modules.push(websiteRoot, adminRoot);
+// config.resolve.modules.push(websiteRoot, adminRoot);
+config.resolve.modules.push(adminRoot);
 module.exports = config;
