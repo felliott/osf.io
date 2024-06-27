@@ -81,7 +81,6 @@ INSTALLED_APPS = (
 
     # 3rd party
     'django_celery_results',
-    'webpack_loader',
     'guardian',
     'waffle',
     'elasticsearch_metrics.apps.ElasticsearchMetricsConfig',
@@ -189,12 +188,12 @@ STATICFILES_DIRS = (
 
 LANGUAGE_CODE = 'en-us'
 
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'public/js/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    }
-}
+# WEBPACK_LOADER = {
+#     'DEFAULT': {
+#         'BUNDLE_DIR_NAME': 'public/js/',
+#         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+#     }
+# }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--verbosity=2']
