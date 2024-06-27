@@ -38,7 +38,7 @@
     <!-- /ko -->
 {% endblock content %}
 {% block bottom_js %}
-    {% render_bundle 'whitelist-page' %}
+    <script src="/static/public/js/whitelist-page.js" />
     {% csrf_token %}
     <script>
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
