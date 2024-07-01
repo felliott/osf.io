@@ -1282,8 +1282,8 @@ develop = false
 [package.source]
 type = "git"
 url = "https://github.com/felliott/django-webpack-loader.git"
-reference = "feature/old-style-peanut-butter"
-resolved_reference = "c8f43e999c767ef53d896b33ed8ce34b746aed67"
+reference = "07ef2693a9ca2e8567593007fa872b575f10986d"
+resolved_reference = "07ef2693a9ca2e8567593007fa872b575f10986d"
 
 [[package]]
 name = "djangorestframework"
@@ -5007,4 +5007,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "beb0a85fd7bbba2d47adfcba87c4b219cbf3a2f9635e245d90bd25f6b935a9ec"
+content-hash = "0c3d661865b3d4e602ae946771f699476f29be2a5933b216e1f73c2a75e19e7b"

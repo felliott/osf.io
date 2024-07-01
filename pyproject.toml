@@ -73,7 +73,7 @@ cryptography = "42.0.5"
 jsonschema = "4.21.1"
 django-guardian = "2.4.0"
 # Admin requirements
-django-webpack-loader = {git = "https://github.com/felliott/django-webpack-loader.git", rev = "feature/old-style-peanut-butter"}
+django-webpack-loader = {git = "https://github.com/felliott/django-webpack-loader.git", rev = "07ef2693a9ca2e8567593007fa872b575f10986d"}
 django-sendgrid-v5 = "1.2.3" # metadata says python 3.10 not supported, but tests pass
 
 # Analytics requirements
