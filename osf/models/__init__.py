@@ -8,7 +8,15 @@ from .action import (
     ReviewAction,
     SchemaResponseAction,
 )
-from .admin_log_entry import AdminLogEntry
+
+# Explicitly don't import AdminLogEntry, b/c that requires that
+# consuming django apps load the django admin module. Django apps that
+# load the admin module are subject to an additional set of checks on
+# production that may not apply. During the Pythonv3.12 upgrade, api
+# refused to start up b/c it didn't pass an irrelevant admin test. So,
+# yeah, let's not do this.
+# from .admin_log_entry import AdminLogEntry
+
 from .admin_profile import AdminProfile
 from .analytics import UserActivityCounter, PageCounter
 from .archive import ArchiveJob, ArchiveTarget

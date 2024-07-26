@@ -4,8 +4,8 @@ from django.contrib.auth.models import Permission
 from django.urls import reverse
 from django.utils.html import escape
 
-from osf.models import AdminLogEntry
-from osf.models import AdminProfile
+from osf.models.admin_log_entry import AdminLogEntry
+from osf.models.admin_profile import AdminProfile
 
 
 class PermissionAdmin(admin.ModelAdmin):

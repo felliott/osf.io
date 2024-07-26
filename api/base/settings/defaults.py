@@ -83,7 +83,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'django.contrib.admin',
 
     # 3rd party
     'django_celery_beat',
@@ -299,9 +298,6 @@ ADDONS_OAUTH = ADDONS_FOLDER_CONFIGURABLE + ['dataverse', 'github', 'bitbucket',
 BYPASS_THROTTLE_TOKEN = 'test-token'
 
 OSF_SHELL_USER_IMPORTS = None
-
-# Settings for use in the admin
-OSF_URL = 'https://osf.io'
 
 SELECT_FOR_UPDATE_ENABLED = True
 

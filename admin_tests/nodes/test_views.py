@@ -4,7 +4,8 @@ from unittest import mock
 import pytz
 import datetime
 
-from osf.models import AdminLogEntry, NodeLog, AbstractNode
+from osf.models import NodeLog, AbstractNode
+from osf.models.admin_log_entry import AdminLogEntry
 from admin.nodes.views import (
     NodeDeleteView,
     NodeRemoveContributorView,

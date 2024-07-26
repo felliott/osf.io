@@ -10,7 +10,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth import login, REDIRECT_FIELD_NAME, authenticate, logout
 
 from osf.models.user import OSFUser
-from osf.models import AdminProfile, AbstractProvider
+from osf.models import AbstractProvider
+from osf.models.admin_profile import AdminProfile
 from admin.common_auth.forms import LoginForm, UserRegistrationForm, DeskUserForm
 
 

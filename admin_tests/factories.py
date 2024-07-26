@@ -1,6 +1,6 @@
 import factory
 
-from osf.models import AdminProfile
+from osf.models.admin_profile import AdminProfile
 from osf_tests.factories import UserFactory as OSFUserFactory
 
 

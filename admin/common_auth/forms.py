@@ -2,7 +2,7 @@ from django import forms
 from django.db.models import Q
 from django.contrib.auth.models import Group
 
-from osf.models import AdminProfile
+from osf.models.admin_profile import AdminProfile
 
 
 class LoginForm(forms.Form):
